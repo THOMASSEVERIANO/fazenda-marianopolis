@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fazenda Marianópolis: viabilidade e crédito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout: painel de trabalho; calculadora em duas colunas (entradas | leitura fixa), depois seções de leitura em coluna de ~70 caracteres */
+  --paper:#F3F5F0; --surface:#FFFFFF; --ink:#17221B; --muted:#56655B; --line:#D3DAD1;
+  --accent:#1F6F54; --accent-soft:#E2EEE7; --on-accent:#FFFFFF;
+  --good:#1B7747; --good-soft:#DDF0E4; --warn:#9A5F06; --warn-soft:#F8EBCF; --bad:#B0342B; --bad-soft:#F8E0DC;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#111713; --surface:#19211C; --ink:#E5EBE5; --muted:#9BA9A0; --line:#2B3730;
+    --accent:#5DBB92; --accent-soft:#1E3229; --on-accent:#0E1511;
+    --good:#62C68F; --good-soft:#18301F; --warn:#E3AC52; --warn-soft:#33290F; --bad:#F0877A; --bad-soft:#3A1B18;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111713; --surface:#19211C; --ink:#E5EBE5; --muted:#9BA9A0; --line:#2B3730;
+  --accent:#5DBB92; --accent-soft:#1E3229; --on-accent:#0E1511;
+  --good:#62C68F; --good-soft:#18301F; --warn:#E3AC52; --warn-soft:#33290F; --bad:#F0877A; --bad-soft:#3A1B18;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header.top{padding:36px 0 20px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.2vw,42px);line-height:1.1;margin:0 0 12px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.2;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:18px;line-height:1.3;margin:22px 0 8px;text-wrap:balance}
+p{margin:0 0 12px}
+.lede{max-width:68ch;color:var(--muted);font-size:17px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+nav.toc{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px 18px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+nav.toc a{font-size:14px;font-weight:500;text-decoration:none;color:var(--muted)}
+nav.toc a:hover{color:var(--accent)}
+section{padding:36px 0;border-bottom:1px solid var(--line)}
+.sub{color:var(--muted);max-width:70ch;margin-bottom:18px}
+.prose{max-width:70ch}
+.prose ul,.prose ol{padding-left:22px;margin:0 0 14px}
+.prose li{margin-bottom:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:22px;align-items:start}
+@media (max-width:900px){.calc{grid-template-columns:minmax(0,1fr)}}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+button{font:inherit;font-size:14px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+fieldset{border:0;padding:0;margin:0 0 18px;min-width:0}
+legend{font-family:var(--display);font-weight:600;font-size:15px;padding:0;margin-bottom:8px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 12px}
+.f label{display:block;font-size:12.5px;color:var(--muted);line-height:1.3;margin-bottom:3px;min-height:2.6em}
+.f .inp{display:flex;align-items:center;border:1px solid var(--line);border-radius:7px;background:var(--paper);overflow:hidden}
+.f input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:15px;font-variant-numeric:tabular-nums;padding:7px 8px}
+.f .u{font-size:12px;color:var(--muted);padding:0 8px 0 2px;white-space:nowrap}
+.f.key .inp{border-color:var(--accent);background:var(--accent-soft)}
+details{border-top:1px solid var(--line);padding:12px 0 2px}
+summary{cursor:pointer;font-family:var(--display);font-weight:600;font-size:15px;margin-bottom:10px}
+.read{position:sticky;top:58px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:900px){.read{position:static}}
+.verdict{border-left:5px solid var(--accent);padding:12px 14px;background:var(--accent-soft);border-radius:0 8px 8px 0;font-weight:500}
+.verdict.bad{border-color:var(--bad);background:var(--bad-soft)}
+.verdict.warn{border-color:var(--warn);background:var(--warn-soft)}
+.verdict.good{border-color:var(--good);background:var(--good-soft)}
+.levels{display:flex;flex-direction:column;gap:0}
+.lv{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.lv:last-child{border-bottom:0}
+.lv .n{font-size:14px}
+.lv .n small{display:block;color:var(--muted);font-size:12.5px}
+.lv .v{font-family:var(--display);font-weight:600;font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--surface)}
+.kpi .l{font-size:12.5px;color:var(--muted);line-height:1.3}
+.kpi .v{font-family:var(--display);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12px;color:var(--muted)}
+.kpi .s.bad{color:var(--bad)} .kpi .s.good{color:var(--good)} .kpi .s.warn{color:var(--warn)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--display);font-weight:600;font-size:13px;color:var(--muted);background:var(--paper)}
+th:first-child,td:first-child{text-align:left}
+tr:last-child td{border-bottom:0}
+td.pos{color:var(--good);background:var(--good-soft)} td.neg{color:var(--bad);background:var(--bad-soft)} td.near{color:var(--warn);background:var(--warn-soft)}
+tr.cur td{font-weight:600} tr.cur td:first-child{box-shadow:inset 4px 0 0 var(--accent)}
+tr.tot td{font-weight:600;border-top:2px solid var(--line)}
+table.txt td,table.txt th{white-space:normal;text-align:left;vertical-align:top}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px}
+.grid2>*{min-width:0}
+.note{font-size:13.5px;color:var(--muted);max-width:75ch;margin-top:10px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;margin-right:6px}
+.tag.ok{background:var(--good-soft);color:var(--good)} .tag.fix{background:var(--warn-soft);color:var(--warn)} .tag.err{background:var(--bad-soft);color:var(--bad)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:700;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:14px}
+footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <p class="eyebrow">Marianópolis do Tocantins · recria e engorda a pasto · APA do Cantão</p>
+  <h1>Viabilidade e crédito da fazenda</h1>
+  <p class="lede">Calculadora de break-even, diagnóstico do material anterior, linhas de crédito da safra 2026/27 e o caminho para montar o projeto no banco. Contas reconferidas em 23/11/2026.</p>
+</div></header>
+<nav class="toc" aria-label="Seções"><div class="wrap">
+  <a href="#calculadora">Calculadora</a><a href="#reconferencia">Reconferência</a><a href="#diagnostico">Diagnóstico</a><a href="#investimento">Investimento</a><a href="#fluxo">Fluxo de 12 anos</a><a href="#credito">Crédito</a><a href="#contatos">Com quem falar</a><a href="#documentos">Documentos</a><a href="#projeto">Projeto</a><a href="#modelos">Modelos</a><a href="#confirmar">A confirmar</a><a href="#fontes">Fontes</a>
+</div></nav>
+
+<main>
+<section id="calculadora"><div class="wrap">
+  <h2>Calculadora de break-even</h2>
+  <p class="sub">Mude qualquer campo e a leitura ao lado recalcula. Os campos em verde são os que mais mexem no resultado. Quatro níveis: paga o custeio, paga também os juros, paga também a amortização, paga também a parcela da terra.</p>
+  <div class="presets" id="presets">
+    <button type="button" data-preset="mercado" aria-pressed="true">Mercado nov/2026 (boi R$ 376, bezerro R$ 3.600)</button>
+    <button type="button" data-preset="antigo" aria-pressed="false">Preços do modelo antigo (R$ 235 e R$ 2.150)</button>
+    <button type="button" data-preset="estresse" aria-pressed="false">Estresse (boi R$ 300, bezerro R$ 3.600)</button>
+    <button type="button" id="reset">Restaurar todos os padrões</button>
+  </div>
+  <div class="calc">
+    <form class="card" id="form" autocomplete="off"></form>
+    <div class="read">
+      <div class="verdict" id="verdict" aria-live="polite"></div>
+      <div class="card"><div class="levels" id="levels"></div></div>
+      <div class="kpis" id="kpis"></div>
+    </div>
+  </div>
+
+  <h3>Resultado anual por tamanho de rebanho</h3>
+  <p class="sub">Mesmos preços e custos, variando só o rebanho. A linha marcada é o rebanho que você digitou. Investimento sem a terra; "próprio até 1ª venda" é o dinheiro do bolso antes da primeira receita, também sem a terra.</p>
+  <div class="tw"><table id="tHerd"></table></div>
+
+  <div class="grid2" style="margin-top:26px">
+    <div>
+      <h3 style="margin-top:0">Mesmo rebanho, outros preços</h3>
+      <div class="tw"><table id="tScen"></table></div>
+    </div>
+    <div>
+      <h3 style="margin-top:0">De onde vem o custeio</h3>
+      <div class="tw"><table id="tOpex"></table></div>
+    </div>
+  </div>
+
+  <h3>Sensibilidade: resultado depois dos juros, boi (colunas) × bezerro (linhas)</h3>
+  <p class="sub">Verde sobra caixa depois de pagar os juros, vermelho falta, amarelo está no limite. Valores em R$ mil por ano, com o rebanho digitado.</p>
+  <div class="tw"><table id="tSens"></table></div>
+  <p class="note">Simplificações: regime estável (compra e venda todos os anos), sem imposto de renda e sem inflação; juros do ano com saldo cheio; amortização constante depois da carência. O rebanho mínimo é procurado de 10 em 10 cabeças. A planilha v3 faz a mesma conta e os dois foram comparados.</p>
+</div></section>
+
+<section id="reconferencia"><div class="wrap">
+  <h2>Reconferência das contas</h2>
+  <div class="prose">
+    <p>Antes de montar esta página refiz a conferência. O resultado:</p>
+    <ul>
+      <li><span class="tag ok">Confere</span>A lógica desta calculadora foi comparada com a planilha em 8 cenários diferentes: 200 valores, diferença máxima menor que um centavo.</li>
+      <li><span class="tag fix">Corrigido</span><strong>Silagem contada duas vezes.</strong> A planilha v2 usava R$ 0,22/kg de silagem pronta e também lançava trator, conjunto de silagem e tratorista. Agora a silagem entra a R$ 0,12/kg, só o desembolso. Efeito: cerca de R$ 41 mil por ano a mais de margem.</li>
+      <li><span class="tag fix">Corrigido</span><strong>Funrural desatualizado.</strong> Eu tinha usado 2,05%. Desde 1º de abril de 2026 a alíquota da pessoa jurídica é 2,23% (pessoa física: 1,63%). Efeito: cerca de R$ 5 mil por ano a menos.</li>
+      <li><span class="tag fix">Leitura ajustada</span>Com as duas correções, 750 cabeças aos preços de novembro <strong>empatam com os juros</strong> de um crédito de R$ 5 milhões. Antes eu tinha dito "não paga os juros"; a diferença era pequena demais para essa afirmação.</li>
+    </ul>
+    <p><strong>O que não muda:</strong> a amortização não é paga em nenhum cenário testado, o investimento sem a terra passa de R$ 5 milhões, e os dois primeiros anos sem venda exigem recurso próprio.</p>
+    <p><strong>O que eu não tenho como garantir:</strong> os números de entrada. Preço da terra, do bezerro, do concentrado, das máquinas e de funcionário são premissas ou cotações de internet. Veja a seção "A confirmar".</p>
+  </div>
+</div></section>
+
+<section id="diagnostico"><div class="wrap">
+  <h2>Diagnóstico do material anterior</h2>
+  <p class="sub">Orçamento original, modelagem e transcrição que vieram no arquivo compactado.</p>
+  <div class="grid2">
+    <div class="prose">
+      <h3 style="margin-top:0">O que estava certo</h3>
+      <ul>
+        <li><strong>Erro das cercas no orçamento original.</strong> Multiplicar 400 m por hectare dava 200 km de cerca e R$ 7,5 milhões. Em bloco contíguo são cerca de 23 km e R$ 720 mil, já com 15% de folga para o perímetro irregular.</li>
+        <li><strong>Custo de formação do pasto.</strong> R$ 5.608/ha, no topo das faixas orçadas.</li>
+        <li><strong>Logística.</strong> Vender em Paraíso do Tocantins custa cerca de R$ 94 por boi de frete; em Araguaína, cerca de R$ 316.</li>
+        <li><strong>Lotação de 1,5 cab/ha.</strong> Equivale a 1,29 UA/ha, no teto da faixa que a Embrapa cita para Andropogon bem manejado, mas dentro dela.</li>
+        <li><strong>Separar a terra da operação.</strong> É estrutura usual; só não entrega a "blindagem" que o material prometia.</li>
+      </ul>
+    </div>
+    <div class="prose">
+      <h3 style="margin-top:0">O que estava errado</h3>
+      <ul>
+        <li><strong>Dashboard com referências trocadas.</strong> Mostrava CAPEX de R$ 115 mil (só o curral), faturamento negativo e "100% coberto pelo crédito".</li>
+        <li><strong>"CAPEX de R$ 4,8 milhões cabe no crédito".</strong> Só fechava com 100 bezerros em 500 ha.</li>
+        <li><strong>Preços defasados.</strong> Boi a R$ 235 e bezerro a R$ 2.150, contra R$ 376 e cerca de R$ 3.600 hoje.</li>
+        <li><strong>Itens ausentes.</strong> Terra, juros, amortização, trator, estrutura de silagem, casa, cochos, frete, Funrural, mortalidade, administração.</li>
+        <li><strong>Primeiros anos.</strong> Supunha venda de metade do rebanho já no primeiro ano.</li>
+        <li><strong>Calendário de suplementação.</strong> Somava 280 dias no ano.</li>
+        <li><strong>Societário.</strong> Risco ambiental acompanha o imóvel (Súmula 623 do STJ); holding e operacional com os mesmos sócios podem ser grupo econômico na Justiça do Trabalho; livro caixa é regime de pessoa física.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="investimento"><div class="wrap">
+  <h2>Investimento</h2>
+  <p class="sub">Calculado com os parâmetros da calculadora. Os valores unitários ficam em "Investimento (valores unitários)", dentro do formulário.</p>
+  <div class="tw"><table id="tCapex"></table></div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <h2>Fluxo de caixa de 12 anos</h2>
+  <p class="sub">Ano 0 é a implantação. Os bezerros entram em lotes anuais a partir do ano 1 e a primeira venda só acontece depois de um giro completo. Valores em R$ mil.</p>
+  <div class="tw"><table id="tFlow"></table></div>
+</div></section>
+
+<section id="credito"><div class="wrap">
+  <h2>Crédito subsidiado, safra 2026/27</h2>
+  <div class="tw"><table class="txt">
+    <tr><th>Linha</th><th>Onde pedir</th><th>Taxa</th><th>Prazo e carência</th><th>Serve para</th></tr>
+    <tr><td><strong>FNO Amazônia Rural</strong></td><td>Banco da Amazônia</td><td>8,21% a.a.; 7,80% pagando em dia (receita até R$ 4,8 milhões)</td><td>Até 12 anos, com até 6 de carência</td><td>Pasto, cercas, curral, poço, máquinas, gado</td></tr>
+    <tr><td><strong>RenovAgro Recuperação e Conversão</strong></td><td>Banco do Brasil, cooperativas e outros agentes do BNDES</td><td>Até 8,5% a.a.</td><td>Até 10 anos, com até 5 de carência; teto de R$ 5 milhões por ano agrícola</td><td>Só a recuperação da pastagem degradada</td></tr>
+    <tr><td><strong>Pronamp</strong></td><td>Bancos e cooperativas</td><td>9% a.a.</td><td>Confirmar no banco</td><td>Médio produtor</td></tr>
+    <tr><td><strong>Moderfrota Pronamp</strong></td><td>Bancos e cooperativas</td><td>11,5% a.a.</td><td>Confirmar no banco</td><td>Trator e implementos (mais caro que o FNO)</td></tr>
+    <tr><td><strong>Eco Invest / Caminho Verde</strong></td><td>Bancos que venceram o leilão, BNDES</td><td>Varia por operação</td><td>Varia</td><td>Recuperação de área degradada; não é crédito de balcão</td></tr>
+  </table></div>
+  <div class="prose" style="margin-top:16px">
+    <p><strong>Terra.</strong> Não encontrei linha subsidiada para compra de terra neste porte. O crédito fundiário federal atende agricultor sem terra ou com pouca terra. Sobra o parcelamento com o vendedor ou crédito a taxa de mercado.</p>
+    <p><strong>O gargalo não é a taxa.</strong> O banco empresta pela capacidade de pagamento e pelas garantias. Três coisas ajudam mais do que meio ponto de juros: pedir carência longa, dividir o pedido (pastagem no RenovAgro, o restante no FNO) e chegar ao banco sabendo que garantia oferecer, já que terra comprada a prazo dificilmente serve.</p>
+  </div>
+</div></section>
+
+<section id="contatos"><div class="wrap">
+  <h2>Com quem falar, nesta ordem</h2>
+  <ol class="steps prose">
+    <li><div><strong>Gerente de crédito rural do Banco da Amazônia</strong>, na agência de Paraíso do Tocantins (confirme endereço e telefone no site do banco). Peça o enquadramento de porte, a lista de garantias aceitas e a relação de projetistas credenciados na agência.</div></li>
+    <li><div><strong>Projetista credenciado</strong>: engenheiro agrônomo, zootecnista ou empresa de planejamento agropecuário. Assina o projeto e a responsabilidade técnica e presta a assistência que o banco exige.</div></li>
+    <li><div><strong>Banco do Brasil, Sicredi ou Sicoob em Paraíso</strong>, para o RenovAgro da parte de pastagem.</div></li>
+    <li><div><strong>Contador e advogado</strong>, antes de assinar a compra da terra, para definir quem será o tomador.</div></li>
+    <li><div><strong>Naturatins</strong>, para a situação ambiental da área dentro da APA do Cantão. Destoca de regeneração antiga pode exigir autorização.</div></li>
+  </ol>
+  <div class="prose">
+    <h3>Projetistas credenciados</h3>
+    <p>A lista não é publicada na internet; fica em cada agência. Por isso não indico nomes. Para conferir quem for indicado:</p>
+    <ul>
+      <li>Registro ativo no CREA-TO (agrônomo) ou no CRMV-TO (zootecnista ou veterinário).</li>
+      <li>Projeto com anotação de responsabilidade técnica e termo de responsabilidade do projetista.</li>
+      <li>Dois ou três projetos de pecuária aprovados no FNO nos últimos anos, e conversa com esses produtores.</li>
+      <li>Forma de cobrança: o usual é percentual sobre o valor financiado, mais a assistência técnica durante a execução.</li>
+    </ul>
+    <p>O sindicato rural de Paraíso ou de Marianópolis e o Senar Tocantins também sabem quem tem projeto aprovado na região.</p>
+    <h3>Dois cuidados no seu caso</h3>
+    <ul>
+      <li><strong>Não assine a compra da terra antes da consulta ao banco.</strong> Terra em nome do vendedor muda a garantia e exige anuência dele e contrato com prazo igual ou maior que o do financiamento.</li>
+      <li><strong>Empresa nova não tem histórico.</strong> O banco tende a olhar o cadastro e o patrimônio dos sócios e a pedir aval.</li>
+    </ul>
+  </div>
+</div></section>
+
+<section id="documentos"><div class="wrap">
+  <h2>Documentos</h2>
+  <p class="sub">Base comum do crédito rural. A lista oficial é o checklist do banco, que está na seção de modelos.</p>
+  <div class="grid2">
+    <div class="prose">
+      <h3 style="margin-top:0">Do tomador</h3>
+      <ul><li>RG, CPF e comprovante de residência, ou contrato social e CNPJ.</li><li>Declaração de imposto de renda e comprovação de patrimônio.</li><li>Certidões negativas e quadro de dívidas existentes.</li><li>Inscrição estadual de produtor rural.</li></ul>
+      <h3>Do imóvel</h3>
+      <ul><li>Matrícula atualizada com certidão de ônus, ou contrato de compra ou arrendamento.</li><li>CCIR, ITR dos últimos cinco anos e CAR.</li><li>Carta de anuência do proprietário, se a terra ainda estiver em nome do vendedor.</li><li>Coordenadas da área do projeto.</li></ul>
+    </div>
+    <div class="prose">
+      <h3 style="margin-top:0">Do empreendimento</h3>
+      <ul><li>Projeto técnico assinado, com responsabilidade técnica registrada.</li><li>Licença ou comprovante de regularidade ambiental e outorga do poço.</li><li>Orçamentos de fornecedores para máquinas, cercas, insumos e gado.</li><li>Para o RenovAgro: análise de solo com recomendação, croqui com pontos de GPS, histórico e fotos da área degradada.</li></ul>
+      <h3>Das garantias</h3>
+      <ul><li>Avaliação do bem oferecido e a documentação dele.</li></ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="projeto"><div class="wrap">
+  <h2>Como o projeto é montado</h2>
+  <ol class="steps prose">
+    <li><div><strong>Consulta prévia e carta-consulta.</strong> Documento curto: quem é o tomador, o que será feito, quanto custa, quanto se pede. Serve para saber se perfil e garantias passam antes de gastar com o projeto.</div></li>
+    <li><div><strong>Visita do projetista.</strong> Medição da área, coleta de solo, levantamento do que já existe.</div></li>
+    <li><div><strong>Projeto técnico.</strong> O que será feito, cronograma físico e financeiro, orçamento item a item. Em pecuária, pesam a evolução do rebanho ano a ano e a capacidade de suporte das pastagens.</div></li>
+    <li><div><strong>Viabilidade econômica.</strong> Fluxo de caixa e capacidade de pagamento, no formato do banco.</div></li>
+    <li><div><strong>Protocolo, análise, vistoria e contratação.</strong> A liberação é em parcelas, conforme a obra anda.</div></li>
+  </ol>
+  <p class="note">A planilha v3 e esta calculadora já cobrem orçamento, custeio, fluxo de 12 anos e capacidade de pagamento. O projetista adapta ao sistema do banco e confere os números em campo.</p>
+</div></section>
+
+<section id="modelos"><div class="wrap">
+  <h2>Modelos oficiais</h2>
+  <p class="sub">Projeto pronto de outro produtor não é público. Estes são os modelos que o projetista preenche. Os arquivos são do Banco da Amazônia, exceto o último.</p>
+  <div class="tw"><table class="txt">
+    <tr><th>Arquivo</th><th>Para que serve</th></tr>
+    <tr><td><a href="https://cdn.bancoamazonia.com.br/bancoamazonia/ROTEIRO_CARTA_CONSULTA_2021_a359e200f8.docx">Roteiro de carta-consulta (Word)</a></td><td>O primeiro documento a entregar.</td></tr>
+    <tr><td><a href="https://cdn.bancoamazonia.com.br/bancoamazonia/roteiro_de_projeto_rural_17_11_2017_doc_430bab37db.docx">Roteiro de projeto rural, editável (Word)</a></td><td>Estrutura completa do projeto técnico.</td></tr>
+    <tr><td><a href="https://cdn.bancoamazonia.com.br/bancoamazonia/MANUAL_PARA_A_UTILIZACAO_DA_AMAZONIA_RURAL_PROJETISTA_V1_3_b0452af820.pdf">Manual do Amazônia Rural Projetista (PDF)</a></td><td>O que o projetista preenche no sistema do banco.</td></tr>
+    <tr><td><a href="https://cdn.bancoamazonia.com.br/bancoamazonia/CARTILHA_DE_DIRETRIZES_TECNICAS_DE_ENGENHARIA_JUL_2025_a59831a17b.pdf">Cartilha de orientações técnicas de engenharia (PDF)</a></td><td>Exigências para orçamentos e obras: curral, cercas, galpão, poço.</td></tr>
+    <tr><td><a href="https://www.bancoamazonia.com.br/rural/orientacao-formento">Orientações de Fomento (página)</a></td><td>Todos os 23 arquivos: checklist de crédito rural, carta de anuência, quadro de endividamento, coordenadas, termo do projetista.</td></tr>
+    <tr><td><a href="https://abccapacitacao.wordpress.com/wp-content/uploads/2012/11/projeto-abc.pdf">Formulário de projeto do Programa ABC (PDF, 2012)</a></td><td>Antigo, mas mostra o que o RenovAgro pede para recuperação de pastagem.</td></tr>
+  </table></div>
+</div></section>
+
+<section id="confirmar"><div class="wrap">
+  <h2>Premissas a confirmar</h2>
+  <div class="tw"><table class="txt">
+    <tr><th>Premissa</th><th>Valor usado</th><th>Por que importa</th></tr>
+    <tr><td><strong>Preço da terra</strong></td><td>R$ 10.000/ha, entrada de 20%, 5 parcelas</td><td>É o maior número do projeto e não estava em nenhum arquivo. Anúncios na região pedem de R$ 12 mil a R$ 16 mil por hectare.</td></tr>
+    <tr><td><strong>Preço do bezerro</strong></td><td>R$ 3.600</td><td>Cotações do Tocantins variaram de R$ 3.300 a R$ 3.980 entre setembro e novembro. É a variável que mais mexe no resultado.</td></tr>
+    <tr><td><strong>Custo de funcionário</strong></td><td>R$ 5.000/mês com encargos</td><td>O modelo anterior usava R$ 4.000.</td></tr>
+    <tr><td><strong>Máquinas e silagem</strong></td><td>R$ 380 mil + R$ 150 mil</td><td>Se terceirizar, zere esses dois e volte a silagem para cerca de R$ 0,22/kg.</td></tr>
+    <tr><td><strong>Silagem e concentrado</strong></td><td>R$ 0,12/kg e R$ 1,70/kg</td><td>Definem o custo da terminação.</td></tr>
+    <tr><td><strong>Administração</strong></td><td>R$ 8.000/mês</td><td>Contabilidade, assistência técnica, energia, ITR.</td></tr>
+    <tr><td><strong>Carência e taxa</strong></td><td>3 anos; 7,80% a.a.</td><td>Dependem do enquadramento e da análise do banco. Juros pagos todo ano, inclusive na carência.</td></tr>
+    <tr><td><strong>Cerca de divisa</strong></td><td>100% a construir</td><td>Se já existe cerca, o investimento cai.</td></tr>
+    <tr><td><strong>Compra dos bezerros</strong></td><td>Lotes anuais iguais</td><td>Comprar tudo de uma vez adia a primeira venda e concentra o risco de preço.</td></tr>
+  </table></div>
+</div></section>
+
+<section id="fontes"><div class="wrap">
+  <h2>Fontes</h2>
+  <div class="prose"><ul>
+    <li><a href="https://www.agrolink.com.br/regional/to/rio-da-conceicao/cotacoes">Agrolink, cotações do Tocantins</a>: boi gordo em Paraíso do Tocantins a R$ 376/@ em 18/11/2026.</li>
+    <li><a href="https://www.noticiasagricolas.com.br/cotacoes/boi-gordo">Notícias Agrícolas (Scot e Datagro)</a>: reposição Nelore no Tocantins e relação de troca do desmama.</li>
+    <li><a href="https://cdn.bancoamazonia.com.br/bancoamazonia/Programacao_Financeira_FNO_2026_2_4c915e06ff.pdf">Banco da Amazônia, Programação FNO 2026</a>: taxas por porte, bônus de adimplência, limite financiável.</li>
+    <li><a href="https://www.bancoamazonia.com.br/linhas-de-fomento/fno/amazonia-rural">Banco da Amazônia, FNO Amazônia Rural</a>: prazos e carência.</li>
+    <li><a href="https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/renovagro">BNDES, RenovAgro</a>: taxa e finalidades.</li>
+    <li><a href="https://www.cnnbrasil.com.br/agro/governo-oficializa-plano-safra-2026-27-empresarial-de-r-5251-bilhoes/">CNN Brasil, Plano Safra 2026/27</a>: taxas do Pronamp e do Moderfrota.</li>
+    <li><a href="https://www.agrolink.com.br/colunistas/manejo-de-pastagens-de-andropogon-na-amazonia-ocidental---_384475.html">Embrapa, manejo de Andropogon</a>: capacidade de suporte e ganho de peso.</li>
+    <li><a href="https://www.agrolink.com.br/noticias/custo-da-pecuaria-sobe-em-todos-os-sistemas-em-mato-grosso_516979.html">Imea via Agrolink</a>: custo operacional total da recria e engorda em Mato Grosso, R$ 369,55/@ no 2º trimestre de 2026.</li>
+    <li><a href="https://www.agrolink.com.br/noticias/mudanca-no-funrural-pode-cortar-margem-do-produtor_511824.html">Agrolink, Funrural</a>: novas alíquotas desde 1º de abril de 2026.</li>
+  </ul></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">Este material organiza contas e informações públicas para apoiar a sua análise. Não é consultoria financeira, jurídica ou contábil. Taxas e limites são os publicados; enquadramento, carência e garantias são definidos pelo banco.</div></footer>
+
+<script>
+// Modelo de recria-engorda a pasto. Mesma lógica da planilha v3.
+var DEFAULTS = {
+  areaTotal: 1000, area: 500, rebanho: 750, lotMax: 1.3, piquete: 50,
+  boi: 376, bez: 3600,
+  pesoEntrada: 6.5, pesoAbate: 20, giro: 24, rend: 0.52, mort: 0.015,
+  diesel: 10, diasAguas: 210, diasSeca: 155, salKg: 0.09, salPreco: 4.5,
+  protKg: 0.35, protPreco: 3.2, diasSemi: 80, silKg: 14, silPreco: 0.12,
+  concKg: 4, concPreco: 1.7, perdasSil: 0.2, prodCapiacu: 100, sanid: 65,
+  dieselLHa: 6, manutHa: 80, manutPct: 0.02,
+  cabVaq: 350, custoFunc: 5000, pessoalFixo: 1, adminMes: 8000,
+  funrural: 0.0223, distKm: 110, tarifaKm: 14.5, boisCarreta: 34,
+  fatorCerca: 1.15, pctDivisa: 1,
+  pastoHa: 5608, curral: 115000, cercaExtKm: 35000, cercaIntKm: 28000,
+  poco: 120000, bebedouro: 12000, galpao: 85000, casa: 120000, cochoCab: 60,
+  trator: 380000, conjSilagem: 150000, capineiraHa: 9000, conting: 0.05,
+  precoTerra: 10000, entradaTerra: 0.2, parcelasTerra: 5,
+  limite: 5000000, taxa: 0.078, prazo: 12, carencia: 3, pctFin: 1
+};
+
+function calc(p) {
+  var r = {};
+  var h = p.rebanho;
+  r.k = 12 / p.giro;
+  r.mortCiclo = p.mort * p.giro / 12;
+  r.s = r.k * (1 - r.mortCiclo);
+  r.compras = h * r.k;
+  r.vendas = h * r.s;
+  r.pvIn = p.pesoEntrada * 30;
+  r.pvOut = p.pesoAbate * 15 / p.rend;
+  r.pesoMedio = (r.pvIn + r.pvOut) / 2;
+  r.lotCab = h / p.area;
+  r.lotUA = r.lotCab * r.pesoMedio / 450;
+  r.cabMax = p.lotMax * 450 / r.pesoMedio * p.area;
+  r.gmd = (r.pvOut - r.pvIn) / (p.giro * 30.4);
+  r.diaria = p.silKg * p.silPreco + p.concKg * p.concPreco;
+  r.freteBoi = p.distKm * 2 * p.tarifaKm / p.boisCarreta;
+  r.cvEstoque = p.salKg * p.diasAguas * p.salPreco + p.diasSeca * p.protKg * p.protPreco + p.sanid;
+  r.cvVendida = p.diasSemi * r.diaria - p.diasSemi * p.protKg * p.protPreco + r.freteBoi;
+
+  // CAPEX
+  var lado = Math.sqrt(p.area * 10000) / 1000;
+  var n = Math.sqrt(p.area / p.piquete);
+  r.kmExt = 4 * lado * p.fatorCerca * p.pctDivisa;
+  r.kmInt = ((Math.round(n) - 1) + (Math.ceil(n) - 1)) * lado * p.fatorCerca;
+  r.cPasto = p.area * p.pastoHa;
+  r.cCercaExt = r.kmExt * p.cercaExtKm;
+  r.cCercaInt = r.kmInt * p.cercaIntKm;
+  r.cBeb = Math.ceil(p.area / p.piquete) * p.bebedouro;
+  r.baseManut = p.curral + r.cCercaExt + r.cCercaInt + p.poco + r.cBeb + p.galpao + p.casa + p.trator + p.conjSilagem;
+  r.cCochos = h * p.cochoCab;
+  r.haCapineira = r.vendas * p.diasSemi * p.silKg / 1000 / (1 - p.perdasSil) / p.prodCapiacu;
+  r.cCapineira = r.haCapineira * p.capineiraHa;
+  r.subtotal = r.cPasto + r.baseManut + r.cCochos + r.cCapineira;
+  r.cConting = r.subtotal * p.conting;
+  r.imob = r.subtotal + r.cConting;
+  r.gado = h * p.bez;
+  r.capexSemTerra = r.imob + r.gado;
+  r.terra = p.areaTotal * p.precoTerra;
+  r.fin = Math.min(p.limite, p.pctFin * r.capexSemTerra);
+  r.aporteSemTerra = r.capexSemTerra - r.fin;
+
+  // OPEX
+  r.oVaq = Math.ceil(h / p.cabVaq) * p.custoFunc * 12;
+  r.oFixoPessoal = p.pessoalFixo * p.custoFunc * 12;
+  r.oSal = h * p.salKg * p.diasAguas * p.salPreco;
+  r.oProt = (h * p.diasSeca - r.vendas * p.diasSemi) * p.protKg * p.protPreco;
+  r.oSemi = r.vendas * p.diasSemi * r.diaria;
+  r.oSanid = h * p.sanid;
+  r.oDiesel = p.area * p.dieselLHa * p.diesel;
+  r.oManut = p.area * p.manutHa;
+  r.oManutMaq = p.manutPct * r.baseManut;
+  r.oAdmin = p.adminMes * 12;
+  r.oFrete = r.vendas * r.freteBoi;
+  r.receita = r.vendas * p.pesoAbate * p.boi;
+  r.oFunrural = p.funrural * r.receita;
+  r.fixos = r.oFixoPessoal + r.oDiesel + r.oManut + r.oManutMaq + r.oAdmin;
+  r.opex = r.oVaq + r.oFixoPessoal + r.oSal + r.oProt + r.oSemi + r.oSanid + r.oDiesel + r.oManut + r.oManutMaq + r.oAdmin + r.oFrete + r.oFunrural;
+  r.repos = r.compras * p.bez;
+  r.margemBruta = r.receita - r.repos;
+  r.ebitda = r.margemBruta - r.opex;
+  r.juros = r.fin * p.taxa;
+  r.anosAmort = Math.max(1, p.prazo - p.carencia);
+  r.amort = r.fin / r.anosAmort;
+  r.parcelaTerra = r.terra * (1 - p.entradaTerra) / p.parcelasTerra;
+  r.n1 = r.ebitda;
+  r.n2 = r.ebitda - r.juros;
+  r.n3 = r.n2 - r.amort;
+  r.n4 = r.n3 - r.parcelaTerra;
+  r.dividaMax = Math.max(0, r.ebitda) / (p.taxa + 1 / r.anosAmort);
+
+  // indicadores
+  r.arrVend = r.vendas * p.pesoAbate;
+  r.arrProd = r.arrVend - r.compras * p.pesoEntrada;
+  r.arrHa = r.arrProd / p.area;
+  r.custoArrVend = (r.repos + r.opex) / r.arrVend;
+  r.custoArrProd = r.opex / r.arrProd;
+  r.agio = (p.bez / p.pesoEntrada) / p.boi - 1;
+  r.margemCabVendida = p.pesoAbate * p.boi - p.bez / (1 - r.mortCiclo);
+
+  // preços de equilíbrio com o rebanho atual
+  var den = r.arrVend * (1 - p.funrural);
+  var custoSemFunr = r.repos + r.opex - r.oFunrural;
+  var extras = [0, r.juros, r.juros + r.amort, r.juros + r.amort + r.parcelaTerra];
+  r.boiMin = extras.map(function (x) { return (custoSemFunr + x) / den; });
+  r.bezMax = extras.map(function (x) { return (r.ebitda - x) / r.compras + p.bez; });
+
+  // fluxo de 12 anos
+  var L = Math.ceil(p.giro / 12), acum = 0, acumST = 0, saldo = 0, lib = 0;
+  var libs = [], fl = [];
+  for (var t = 0; t <= 12; t++) {
+    var herd = Math.min(h, t * h * r.k);
+    var comp = t >= 1 ? h * r.k : 0;
+    var vend = t > L ? h * r.s : 0;
+    var rec = vend * p.pesoAbate * p.boi;
+    var compraR = comp * p.bez;
+    var op = herd * r.cvEstoque + vend * r.cvVendida +
+      (herd > 0 ? r.fixos + Math.ceil(herd / p.cabVaq) * p.custoFunc * 12 : p.adminMes * 12 + p.pessoalFixo * p.custoFunc * 12) +
+      p.funrural * rec;
+    var capexT = t === 0 ? r.imob : 0;
+    var liberacao = t <= L ? Math.max(0, Math.min(p.limite - lib, p.pctFin * (capexT + compraR))) : 0;
+    lib += liberacao;
+    libs.push(liberacao);
+    fl.push({ t: t, herd: herd, vend: vend, rec: rec, compra: compraR, opex: op, capex: capexT, lib: liberacao });
+  }
+  var totalLib = lib;
+  r.fluxo = [];
+  r.picoSem = 0; r.picoCom = 0; r.rpSem = 0; r.rpCom = 0; r.cobMin = null;
+  for (t = 0; t <= 12; t++) {
+    var f = fl[t];
+    var jur = saldo * p.taxa;
+    var am = (t > p.carencia && t <= p.prazo) ? totalLib / r.anosAmort : 0;
+    var terraT = t === 0 ? r.terra * p.entradaTerra : (t <= p.parcelasTerra ? r.parcelaTerra : 0);
+    var caixaOp = f.rec - f.compra - f.opex;
+    var semTerra = caixaOp - f.capex + f.lib - jur - am;
+    saldo = saldo + f.lib - am;
+    acumST += semTerra; acum += semTerra - terraT;
+    if (-acumST > r.picoSem) r.picoSem = -acumST;
+    if (-acum > r.picoCom) r.picoCom = -acum;
+    if (t === L) { r.rpSem = -acumST; r.rpCom = -acum; }
+    if (jur + am > 0 && f.vend > 0) {
+      var cob = caixaOp / (jur + am);
+      if (r.cobMin === null || cob < r.cobMin) r.cobMin = cob;
+    }
+    r.fluxo.push({ t: t, herd: f.herd, vend: f.vend, rec: f.rec, compra: f.compra, opex: f.opex, caixaOp: caixaOp, capex: f.capex, terra: terraT, lib: f.lib, juros: jur, amort: am, saldo: saldo, semTerra: semTerra, acumST: acumST, acum: acum });
+  }
+  return r;
+}
+
+function clone(p, extra) {
+  var q = {}, k;
+  for (k in p) q[k] = p[k];
+  for (k in extra) q[k] = extra[k];
+  return q;
+}
+
+// menor rebanho (passo de 10 cabeças) em que cada nível fica >= 0
+function breakEvenHerd(p, maxH) {
+  var out = [null, null, null, null];
+  maxH = maxH || 3000;
+  for (var h = 10; h <= maxH; h += 10) {
+    var r = calc(clone(p, { rebanho: h }));
+    var v = [r.n1, r.n2, r.n3, r.n4];
+    for (var i = 0; i < 4; i++) if (out[i] === null && v[i] >= 0) out[i] = h;
+    if (out[3] !== null) break;
+  }
+  return out;
+}
+
+if (typeof module !== "undefined") module.exports = { DEFAULTS: DEFAULTS, calc: calc, clone: clone, breakEvenHerd: breakEvenHerd };
+
+</script>
+<script>
+(function(){
+"use strict";
+var F=[
+ ["g","Propriedade e rebanho"],
+ ["rebanho","Rebanho alojado","cab",10,0,1],["area","Área de pasto","ha",10,0,1],["lotMax","Capacidade de suporte","UA/ha",0.1],["areaTotal","Área total","ha",10],
+ ["g","Preços"],
+ ["boi","Boi gordo","R$/@",5,0,1],["bez","Bezerro desmama","R$/cab",50,0,1],
+ ["g","Zootecnia"],
+ ["pesoEntrada","Peso de entrada","@",0.5],["pesoAbate","Peso de abate","@",0.5],["giro","Giro, da compra ao abate","meses",1,0,1],["mort","Mortalidade","% a.a.",0.5,1],["rend","Rendimento de carcaça","%",1,1],
+ ["g","Crédito"],
+ ["limite","Crédito pretendido","R$",100000,0,1],["taxa","Juros","% a.a.",0.1,1,1],["prazo","Prazo total","anos",1],["carencia","Carência","anos",1,0,1],["pctFin","Parcela financiável","%",5,1],
+ ["g","Terra"],
+ ["precoTerra","Preço da terra","R$/ha",500,0,1],["entradaTerra","Entrada","%",5,1],["parcelasTerra","Parcelas anuais","anos",1],
+ ["d","Custeio (nutrição, pessoal, frete)"],
+ ["custoFunc","Custo por funcionário","R$/mês",100],["cabVaq","Cabeças por vaqueiro","cab",10],["pessoalFixo","Funcionários fixos","pessoas",1],["adminMes","Administração","R$/mês",500],
+ ["diasAguas","Dias de águas","dias",5],["diasSeca","Dias de seca","dias",5],["salKg","Sal mineral","kg/cab/dia",0.01],["salPreco","Preço do sal mineral","R$/kg",0.1],
+ ["protKg","Proteinado","kg/cab/dia",0.05],["protPreco","Preço do proteinado","R$/kg",0.1],["diasSemi","Dias de semiconfinamento","dias",5],["silKg","Silagem","kg/cab/dia",1],
+ ["silPreco","Desembolso da silagem","R$/kg",0.01],["concKg","Concentrado","kg/cab/dia",0.5],["concPreco","Preço do concentrado","R$/kg",0.05],["sanid","Sanidade","R$/cab/ano",5],
+ ["diesel","Diesel","R$/L",0.5],["dieselLHa","Diesel de rotina","L/ha/ano",1],["manutHa","Manutenção de pasto e cercas","R$/ha/ano",10],["manutPct","Manutenção de máquinas e benfeitorias","% a.a.",0.5,1],
+ ["funrural","Funrural e Senar","% da receita",0.01,1],["distKm","Distância ao frigorífico","km",10],["tarifaKm","Frete","R$/km rodado",0.5],["boisCarreta","Bois por carreta","cab",1],
+ ["d","Investimento (valores unitários)"],
+ ["pastoHa","Formação do pasto","R$/ha",100],["curral","Curral","R$",5000],["cercaExtKm","Cerca de divisa","R$/km",1000],["cercaIntKm","Cerca interna","R$/km",1000],
+ ["fatorCerca","Folga do perímetro","x",0.05],["pctDivisa","Divisa a construir","%",10,1],["piquete","Tamanho do piquete","ha",5],["poco","Poço e adutora","R$",5000],
+ ["bebedouro","Bebedouro por piquete","R$",1000],["galpao","Galpão","R$",5000],["casa","Casa de vaqueiro","R$",5000],["cochoCab","Cochos","R$/cab",5],
+ ["trator","Trator e implementos","R$",10000],["conjSilagem","Conjunto de silagem","R$",10000],["capineiraHa","Formação da capineira","R$/ha",500],["perdasSil","Perdas de silagem","%",5,1],
+ ["prodCapiacu","Produtividade do capiaçu","t/ha/ano",10],["conting","Contingência","%",1,1]
+];
+var PCT={}; F.forEach(function(f){ if(f[4]) PCT[f[0]]=1; });
+var $=function(id){return document.getElementById(id);};
+var nf0=new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0});
+function n(v,d){return new Intl.NumberFormat("pt-BR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0}).format(v);}
+function R(v){return (v<0?"−R$ ":"R$ ")+nf0.format(Math.abs(Math.round(v)));}
+function Rk(v){return (v<0?"−":"")+nf0.format(Math.abs(Math.round(v/1000)));}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+
+// formulário
+(function build(){
+  var html="",open=null;
+  function close(){ if(open==="g") html+="</div></fieldset>"; if(open==="d") html+="</div></details>"; }
+  F.forEach(function(f){
+    if(f[0]==="g"){close();html+="<fieldset><legend>"+f[1]+"</legend><div class=\"fields\">";open="g";return;}
+    if(f[0]==="d"){close();html+="<details><summary>"+f[1]+"</summary><div class=\"fields\">";open="d";return;}
+    html+="<div class=\"f"+(f[5]?" key":"")+"\"><label for=\"i_"+f[0]+"\">"+f[1]+"</label><div class=\"inp\"><input id=\"i_"+f[0]+"\" type=\"number\" inputmode=\"decimal\" step=\""+f[3]+"\" min=\"0\"><span class=\"u\">"+f[2]+"</span></div></div>";
+  });
+  close();
+  $("form").innerHTML=html;
+})();
+
+function setInputs(p){
+  F.forEach(function(f){ if(f.length<3) return; var v=p[f[0]]; if(PCT[f[0]]) v=Math.round(v*1e6)/1e4; $("i_"+f[0]).value=v; });
+}
+function readInputs(){
+  var p=clone(DEFAULTS,{});
+  F.forEach(function(f){ if(f.length<3) return; var v=parseFloat($("i_"+f[0]).value); if(!isFinite(v)||v<0) v=DEFAULTS[f[0]]*(PCT[f[0]]?100:1); p[f[0]]=PCT[f[0]]?v/100:v; });
+  // limites para a conta não quebrar
+  p.area=Math.max(1,p.area); p.rebanho=Math.max(1,p.rebanho); p.giro=Math.max(6,p.giro); p.rend=Math.min(0.7,Math.max(0.3,p.rend));
+  p.parcelasTerra=Math.max(1,p.parcelasTerra); p.boisCarreta=Math.max(1,p.boisCarreta); p.cabVaq=Math.max(1,p.cabVaq); p.piquete=Math.max(1,p.piquete);
+  p.perdasSil=Math.min(0.9,p.perdasSil); p.prodCapiacu=Math.max(1,p.prodCapiacu); p.pesoAbate=Math.max(p.pesoEntrada+0.5,p.pesoAbate); p.lotMax=Math.max(0.1,p.lotMax); p.boi=Math.max(1,p.boi);
+  return p;
+}
+function st(v,ob){ var tol=0.05*Math.abs(ob); return v>=tol?"good":(v>-tol?"warn":"bad"); }
+function cls(v,tol){ return v>=tol?"pos":(v>-tol?"near":"neg"); }
+
+function render(){
+  var p=readInputs(), r=calc(p), be=breakEvenHerd(p,3000);
+  var S=[st(r.n1,r.opex),st(r.n2,r.juros||r.opex),st(r.n3,r.amort||r.opex),st(r.n4,r.parcelaTerra||r.opex)];
+  var W={good:["Paga","Paga"],warn:["No limite","Empata"],bad:["Não paga","Não paga"]};
+  var names=["o custeio","os juros","a amortização","a parcela da terra"];
+  // veredito
+  var parts=[],worst="good";
+  for(var i=0;i<4;i++){
+    if(i>0&&S[i-1]==="bad"){break;}
+    parts.push(S[i]==="good"?"Paga "+names[i]+".":S[i]==="warn"?"Empata com "+names[i]+", sem folga.":"Não paga "+names[i]+".");
+    if(S[i]!=="good"){ worst=S[i]==="bad"?"bad":(worst==="bad"?"bad":"warn"); }
+    if(S[i]==="bad") break;
+  }
+  if(r.fin===0) parts.push("Sem crédito, os níveis 2 e 3 são iguais ao 1.");
+  var v=$("verdict"); v.className="verdict "+worst; v.textContent=h(p.rebanho)+" cabeças em "+h(p.area)+" ha: "+parts.join(" ");
+  function h(x){return nf0.format(x);}
+  // níveis
+  var L=[["Nível 1: margem operacional","receita − reposição − custeio",r.n1],["Nível 2: depois dos juros","juros de "+R(r.juros)+" por ano",r.n2],["Nível 3: depois da amortização","parcela de "+R(r.amort)+" por ano",r.n3],["Nível 4: depois da terra","parcela de "+R(r.parcelaTerra)+" por ano",r.n4]];
+  $("levels").innerHTML=L.map(function(x,i){return "<div class=\"lv\"><div class=\"n\">"+x[0]+"<small>"+x[1]+"</small></div><div class=\"v\">"+R(x[2])+"</div><span class=\"pill "+S[i]+"\">"+W[S[i]][0]+"</span></div>";}).join("");
+  // kpis
+  function beTxt(i){ if(be[i]===null) return ["mais de 3.000","bad","não cabe na área"]; var ok=be[i]<=r.cabMax; return [h(be[i])+" cab", ok?"good":"bad", ok?"cabe na área":"acima do que a área suporta"]; }
+  var K=[];
+  var b1=beTxt(0),b2=beTxt(1),b3=beTxt(2);
+  K.push(["Rebanho mínimo para o custeio",b1[0],b1[2],b1[1]]);
+  K.push(["Rebanho mínimo para custeio + juros",b2[0],b2[2],b2[1]]);
+  K.push(["Rebanho mínimo para a parcela do banco",b3[0],b3[2],b3[1]]);
+  K.push(["Rebanho máximo que a área suporta",h(r.cabMax)+" cab",n(p.lotMax,1)+" UA/ha de referência",""]);
+  K.push(["Lotação",n(r.lotUA,2)+" UA/ha",n(r.lotCab,2)+" cab/ha"+(r.lotUA>p.lotMax?", acima da capacidade":""),r.lotUA>p.lotMax?"bad":"good"]);
+  K.push(["Ganho diário exigido",n(r.gmd,2)+" kg/dia",r.gmd<=0.6?"dentro de 0,4 a 0,6 (Embrapa)":"acima do usual a pasto",r.gmd<=0.6?"good":"bad"]);
+  K.push(["Arroba mínima para custeio + juros","R$ "+n(r.boiMin[1],0),"hoje: R$ "+n(p.boi,0),r.boiMin[1]<=p.boi?"good":"bad"]);
+  K.push(["Arroba mínima para a parcela do banco","R$ "+n(r.boiMin[2],0),"hoje: R$ "+n(p.boi,0),r.boiMin[2]<=p.boi?"good":"bad"]);
+  K.push(["Bezerro máximo para custeio + juros",r.bezMax[1]>0?R(r.bezMax[1]):"inviável","hoje: "+R(p.bez),r.bezMax[1]>=p.bez?"good":"bad"]);
+  K.push(["Dívida que a margem paga",R(r.dividaMax),"crédito usado: "+R(r.fin),r.dividaMax>=r.fin?"good":"bad"]);
+  K.push(["Investimento sem a terra",R(r.capexSemTerra),r.capexSemTerra<=p.limite?"cabe no crédito":"passa do crédito em "+R(r.capexSemTerra-r.fin),r.capexSemTerra<=p.limite?"good":"bad"]);
+  K.push(["Recurso próprio até a 1ª venda",R(r.rpSem),"com a terra: "+R(r.rpCom),""]);
+  K.push(["Custo por arroba vendida","R$ "+n(r.custoArrVend,0),"reposição + custeio; Imea MT: R$ 370",""]);
+  K.push(["Arrobas produzidas por hectare",n(r.arrHa,1)+" @/ha/ano","ágio do bezerro: "+n(r.agio*100,0)+"%",""]);
+  $("kpis").innerHTML=K.map(function(k){return "<div class=\"kpi\"><div class=\"l\">"+k[0]+"</div><div class=\"v\">"+k[1]+"</div><div class=\"s "+k[3]+"\">"+k[2]+"</div></div>";}).join("");
+
+  // tabela por rebanho
+  var hs=[]; for(var x=100;x<=1500;x+=100) hs.push(x); if(hs.indexOf(p.rebanho)<0){hs.push(p.rebanho);hs.sort(function(a,b){return a-b;});}
+  var t="<tr><th>Rebanho</th><th>cab/ha</th><th>UA/ha</th><th>Cabe?</th><th>1: margem</th><th>2: após juros</th><th>3: após amortização</th><th>Investimento</th><th>Próprio até 1ª venda</th></tr>";
+  hs.forEach(function(x){ var q=calc(clone(p,{rebanho:x}));
+    t+="<tr"+(x===p.rebanho?" class=\"cur\"":"")+"><td>"+h(x)+" cab</td><td>"+n(q.lotCab,2)+"</td><td>"+n(q.lotUA,2)+"</td><td>"+(q.lotUA<=p.lotMax?"Sim":"Excede")+"</td><td class=\""+cls(q.n1,0.05*q.opex)+"\">"+R(q.n1)+"</td><td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+R(q.n2)+"</td><td class=\""+cls(q.n3,0.05*(q.amort||q.opex))+"\">"+R(q.n3)+"</td><td>"+R(q.capexSemTerra)+"</td><td>"+R(q.rpSem)+"</td></tr>"; });
+  $("tHerd").innerHTML=t;
+
+  // cenários
+  var sc=[["Digitado",p.boi,p.bez],["Mercado nov/2026",376,3600],["Modelo antigo",235,2150],["Estresse",300,3600]];
+  t="<tr><th>Cenário</th><th>Boi</th><th>Bezerro</th><th>Margem</th><th>Após juros</th><th>Após amortização</th></tr>";
+  sc.forEach(function(s){ var q=calc(clone(p,{boi:s[1],bez:s[2]}));
+    t+="<tr><td>"+s[0]+"</td><td>"+n(s[1])+"</td><td>"+n(s[2])+"</td><td class=\""+cls(q.n1,0.05*q.opex)+"\">"+R(q.n1)+"</td><td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+R(q.n2)+"</td><td class=\""+cls(q.n3,0.05*(q.amort||q.opex))+"\">"+R(q.n3)+"</td></tr>"; });
+  $("tScen").innerHTML=t;
+
+  // custeio
+  var O=[["Receita com boi gordo",r.receita],["Reposição de bezerros",-r.repos],["Vaqueiros",-r.oVaq],["Pessoal fixo",-r.oFixoPessoal],["Sal mineral",-r.oSal],["Proteinado",-r.oProt],["Semiconfinamento",-r.oSemi],["Sanidade",-r.oSanid],["Diesel de rotina",-r.oDiesel],["Manutenção de pasto e cercas",-r.oManut],["Manutenção de máquinas e benfeitorias",-r.oManutMaq],["Administração",-r.oAdmin],["Frete",-r.oFrete],["Funrural e Senar",-r.oFunrural]];
+  t="<tr><th>Linha</th><th>R$ por ano</th><th>R$ por cabeça</th></tr>";
+  O.forEach(function(o){t+="<tr><td>"+o[0]+"</td><td>"+R(o[1])+"</td><td>"+R(o[1]/p.rebanho)+"</td></tr>";});
+  t+="<tr class=\"tot\"><td>Margem operacional</td><td>"+R(r.n1)+"</td><td>"+R(r.n1/p.rebanho)+"</td></tr>";
+  $("tOpex").innerHTML=t;
+
+  // sensibilidade
+  var bois=[],bezs=[],a; for(a=260;a<=440;a+=20) bois.push(a); for(a=2400;a<=4500;a+=300) bezs.push(a);
+  t="<tr><th>Bezerro \\ Boi</th>"+bois.map(function(b){return "<th>"+b+"</th>";}).join("")+"</tr>";
+  bezs.forEach(function(z){ t+="<tr><td>R$ "+n(z)+"</td>"+bois.map(function(b){var q=calc(clone(p,{boi:b,bez:z}));return "<td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+Rk(q.n2)+"</td>";}).join("")+"</tr>"; });
+  $("tSens").innerHTML=t;
+
+  // capex
+  var C=[["Formação de pastagem",n(p.area)+" ha × R$ "+n(p.pastoHa),r.cPasto],["Curral","",p.curral],["Cerca de divisa",n(r.kmExt,1)+" km",r.cCercaExt],["Cercas internas",n(r.kmInt,1)+" km",r.cCercaInt],["Poço e adutora","",p.poco],["Bebedouros nos piquetes",Math.ceil(p.area/p.piquete)+" piquetes",r.cBeb],["Galpão","",p.galpao],["Casa de vaqueiro","",p.casa],["Cochos",n(p.rebanho)+" cab",r.cCochos],["Trator e implementos","",p.trator],["Conjunto de silagem","",p.conjSilagem],["Capineira de capiaçu",n(r.haCapineira,1)+" ha",r.cCapineira],["Contingência",n(p.conting*100,0)+"%",r.cConting]];
+  t="<tr><th>Item</th><th>Quantidade</th><th>R$</th></tr>";
+  C.forEach(function(c){t+="<tr><td>"+c[0]+"</td><td>"+c[1]+"</td><td>"+R(c[2])+"</td></tr>";});
+  t+="<tr class=\"tot\"><td>Imobilizado</td><td></td><td>"+R(r.imob)+"</td></tr>";
+  t+="<tr><td>Bezerros</td><td>"+n(p.rebanho)+" cab × "+R(p.bez)+"</td><td>"+R(r.gado)+"</td></tr>";
+  t+="<tr class=\"tot\"><td>Investimento sem a terra</td><td></td><td>"+R(r.capexSemTerra)+"</td></tr>";
+  t+="<tr><td>Crédito utilizado</td><td></td><td>"+R(-r.fin)+"</td></tr>";
+  t+="<tr class=\"tot\"><td>Aporte próprio no investimento</td><td></td><td>"+R(r.aporteSemTerra)+"</td></tr>";
+  t+="<tr><td>Terra</td><td>"+n(p.areaTotal)+" ha × "+R(p.precoTerra)+"</td><td>"+R(r.terra)+"</td></tr>";
+  $("tCapex").innerHTML=t;
+
+  // fluxo
+  var rows=[["Rebanho (cab)","herd",0],["Receita","rec",1],["Compra de bezerros","compra",-1],["Custeio","opex",-1],["Caixa operacional","caixaOp",2],["Investimento imobilizado","capex",-1],["Liberação do crédito","lib",1],["Juros","juros",-1],["Amortização","amort",-1],["Fluxo sem a terra","semTerra",2],["Acumulado sem a terra","acumST",2],["Terra","terra",-1],["Acumulado com a terra","acum",2]];
+  t="<tr><th>Ano</th>"+r.fluxo.map(function(f){return "<th>"+f.t+"</th>";}).join("")+"</tr>";
+  rows.forEach(function(rw){ t+="<tr"+(rw[2]===2?" class=\"tot\"":"")+"><td>"+rw[0]+"</td>"+r.fluxo.map(function(f){var x=f[rw[1]]*(rw[2]===-1?-1:1); if(rw[2]===0) return "<td>"+h(x)+"</td>"; return "<td"+(rw[2]===2?" class=\""+(x<0?"neg":"pos")+"\"":"")+">"+(Math.abs(x)<500?"0":Rk(x))+"</td>";}).join("")+"</tr>"; });
+  $("tFlow").innerHTML=t;
+
+  try{ var sv={}; F.forEach(function(f){ if(f.length>=3) sv[f[0]]=p[f[0]]; }); localStorage.setItem("fazenda-calc-v3",JSON.stringify(sv)); }catch(e){}
+}
+
+var PRE={mercado:{boi:376,bez:3600},antigo:{boi:235,bez:2150},estresse:{boi:300,bez:3600}};
+function markPreset(){
+  var b=parseFloat($("i_boi").value),z=parseFloat($("i_bez").value);
+  Array.prototype.forEach.call(document.querySelectorAll("[data-preset]"),function(btn){var q=PRE[btn.getAttribute("data-preset")];btn.setAttribute("aria-pressed",(q.boi===b&&q.bez===z)?"true":"false");});
+}
+var start=clone(DEFAULTS,{});
+try{ var s=JSON.parse(localStorage.getItem("fazenda-calc-v3")||"null"); if(s) for(var k in s) if(k in DEFAULTS&&isFinite(s[k])) start[k]=s[k]; }catch(e){}
+setInputs(start);
+$("form").addEventListener("input",function(){render();markPreset();});
+$("form").addEventListener("submit",function(e){e.preventDefault();});
+$("presets").addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b) return;
+  if(b.id==="reset"){ setInputs(DEFAULTS); }
+  else { var q=PRE[b.getAttribute("data-preset")]; $("i_boi").value=q.boi; $("i_bez").value=q.bez; }
+  render(); markPreset();
+});
+render(); markPreset();
+})();
+</script>
+</body>
+</html>
