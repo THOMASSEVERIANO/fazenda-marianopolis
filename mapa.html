@@ -57,9 +57,14 @@ ul{padding-left:18px;margin:6px 0}
 li{margin-bottom:4px}
 .leaflet-popup-content{font-family:var(--body);font-size:13px;line-height:1.4;max-height:260px;overflow:auto}
 .leaflet-popup-content b{font-family:var(--display)}
-.ti-hue{filter:hue-rotate(250deg) saturate(1.8)}
 .cpt{background:#B0342B;color:#fff;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font:600 11px var(--display);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)}
 .cpt.al{background:#9A5F06}
+.frg{background:#1F3A8A;color:#fff;border-radius:4px;width:22px;height:22px;display:grid;place-items:center;font:700 12px var(--display);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.srow{display:flex;gap:6px;margin-top:3px}
+.srow input{flex:1;min-width:0;font:inherit;font-size:14px;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink)}
+.search{margin-top:10px}
+.search .st{margin-left:0;min-height:1.2em}
+.reg b{font-family:var(--display)}
 </style>
 </head>
 <body>
@@ -71,6 +76,12 @@ li{margin-bottom:4px}
   <p class="small">Ligue as camadas, ajuste a transparência e clique no mapa para ver o que há naquele ponto. Os dados vêm ao vivo dos órgãos oficiais; alguns demoram a carregar.</p>
   <div class="row" id="regions"></div>
   <div class="row" style="margin-top:6px" id="bases"></div>
+  <div class="search">
+    <label for="q" class="small">Ir para um município do Pará, Tocantins ou Mato Grosso</label>
+    <div class="srow"><input id="q" list="munis" placeholder="Ex.: Marianópolis do Tocantins" autocomplete="off"><button type="button" id="go">Ir</button></div>
+    <datalist id="munis"></datalist>
+    <div class="st" id="qst" aria-live="polite"></div>
+  </div>
 
   <div id="layers"></div>
 
@@ -79,9 +90,17 @@ li{margin-bottom:4px}
     <li><b>Primeiro, o que elimina:</b> terra indígena, unidade de conservação de proteção integral e área embargada. Área de proteção ambiental (APA) permite pecuária, mas com regras próprias.</li>
     <li><b>Bioma define a reserva legal:</b> na Amazônia Legal, 80% em floresta e 35% em cerrado. A camada de biomas mostra em qual lado a área cai.</li>
     <li><b>Desmatamento recente:</b> área aberta depois de julho de 2019 sem autorização pode travar o crédito rural.</li>
-    <li><b>Chuva:</b> mais chuva e seca mais curta sustentam mais lotação. Compare as faixas entre regiões.</li>
+    <li><b>Chuva:</b> mais chuva e seca mais curta sustentam mais lotação. Compare as faixas entre regiões. Chuva, isoietas e biomas cobrem só a área de foco, do sul do Pará ao nordeste de Mato Grosso.</li>
     <li><b>Argila:</b> solo muito arenoso segura pouca água e adubo; solo argiloso segura mais, mas pode encharcar em baixada. O mapa é estimativa global com resolução de 250 m; só análise de solo confirma.</li>
     <li><b>Parcelas certificadas:</b> onde aparece polígono do Sigef, o imóvel foi medido e certificado no Incra. Ausência não é prova de problema, mas pede mais cuidado com a documentação.</li>
+  </ul>
+
+  <h2>Leitura por região</h2>
+  <p class="small">Primeira leitura, para orientar a busca. As faixas de chuva são ordem de grandeza; confira cada área nas camadas e, depois, na documentação do imóvel.</p>
+  <ul class="small reg">
+    <li><b>Sul e sudeste do Pará.</b> Chove mais (na ordem de 1.700 a 2.100 mm) e a seca é mais curta, o que sustenta mais lotação. É onde há mais frigoríficos: Marabá, Xinguara, Redenção, Tucumã e Santana do Araguaia. Em troca, a maior parte está no bioma Amazônia, com reserva legal de 80% em área de floresta, e é a região com mais conflitos no campo, mais terras indígenas e mais desmatamento recente. A conferência de título e de embargo pesa mais aqui.</li>
+    <li><b>Tocantins.</b> Cerrado na maior parte, com reserva legal de 35%. A chuva cai do norte e do oeste (perto de 1.800 a 2.000 mm) para o sudeste (perto de 1.300 mm), com seca de cerca de cinco meses. O solo varia muito: há manchas arenosas e áreas que encharcam na planície do Araguaia; use a camada de argila. Frigoríficos em Araguaína, Nova Olinda, Paraíso, Gurupi e Alvorada. Atenção aos títulos de origem estadual: o STF derrubou em 2026 a lei tocantinense de regularização de terras.</li>
+    <li><b>Nordeste de Mato Grosso.</b> Faixa de transição entre Cerrado e Amazônia: a reserva legal é de 35% ou de 80% conforme a vegetação do imóvel. Chuva na ordem de 1.500 a 2.000 mm. A soja avança pela BR-158 e puxa o preço da terra. Poucos compradores de boi: as plantas conhecidas ficam em Confresa, Água Boa e Barra do Garças. Há terras indígenas extensas; a Marãiwatsédé já teve retirada de ocupantes.</li>
   </ul>
 
   <h2>Conflitos no campo (CPT)</h2>
@@ -90,6 +109,7 @@ li{margin-bottom:4px}
   <h2>O que este mapa não faz</h2>
   <ul class="small">
     <li>Não cruza as camadas sozinho (por exemplo, "argila acima de 35% e chuva acima de 1.800 mm"). A comparação é visual.</li>
+    <li>A camada de frigoríficos marca a cidade, não a planta, e vem de listas públicas de habilitação e de notícias. Confirme se a unidade está operando e comprando.</li>
     <li>Não mostra assentamentos nem quilombos: o serviço de mapas do Incra para essas camadas está fora do ar. Consulte o painel do Incra.</li>
     <li>Não substitui a conferência da matrícula, do CAR e dos embargos de cada fazenda.</li>
   </ul>
@@ -104,8 +124,11 @@ li{margin-bottom:4px}
     <li>Argila: ISRIC, SoilGrids 2.0.</li>
     <li>Chuva média anual 1977 a 2006: SGB/CPRM, Atlas Pluviométrico, via ANA.</li>
     <li>Conflitos: Comissão Pastoral da Terra, Conflitos no Campo 2025 e Atlas dos Conflitos na Amazônia.</li>
+    <li>Municípios e limites: IBGE, API de localidades e de malhas.</li>
+    <li>Frigoríficos: listas de estabelecimentos habilitados à exportação (Ministério da Agricultura e autoridade sanitária saudita, 2026) e noticiário setorial.</li>
     <li>Mapa de fundo: OpenStreetMap; imagem de satélite: Esri.</li>
   </ul>
+  <p class="small" style="margin-top:14px">Versão de 24/11/2026.</p>
 </aside>
 <div id="map" role="application" aria-label="Mapa interativo"></div>
 </div>
@@ -139,34 +162,42 @@ function gleg(url,layer){return url+(url.indexOf("?")<0?"?":"&")+"service=WMS&ve
 // g: grupo; id; nome; descrição; url; camada WMS; opacidade; consultável; legenda; zoom mínimo; ligada no início
 var LAYERS=[
  {g:"O que restringe",id:"uc",n:"Unidades de conservação (parques, reservas, APAs)",d:"Federais, estaduais e municipais.",url:INDE+"MMA/ows",l:"cnuc_26_07_31",o:.6,q:1,on:1,leg:gleg(INDE+"MMA/ows","cnuc_26_07_31")},
- {g:"O que restringe",id:"ti",n:"Terras indígenas",cls:"ti-hue",d:"Aparecem em tom alaranjado, para não confundir com as unidades de conservação.",url:"https://geoserver.funai.gov.br/geoserver/Funai/wms",l:"tis_poligonais",o:.6,q:1,on:1,leg:gleg("https://geoserver.funai.gov.br/geoserver/Funai/wms","tis_poligonais")},
+ {g:"O que restringe",id:"ti",n:"Terras indígenas",sld:1,d:"<span class=\"sw\" style=\"background:#E07B00\"></span>Aparecem em laranja.",url:"https://geoserver.funai.gov.br/geoserver/Funai/wms",l:"tis_poligonais",o:.8,q:1,on:1},
  {g:"O que restringe",id:"tie",n:"Terras indígenas em estudo",d:"Pontos de áreas ainda em estudo pela Funai.",url:"https://geoserver.funai.gov.br/geoserver/Funai/wms",l:"tis_pontos",o:1,q:0},
  {g:"O que restringe",id:"emb",n:"Áreas embargadas em unidades federais",d:"Embargos do ICMBio. Não inclui os embargos do Ibama nem os estaduais.",url:INDE+"ICMBio/ows",l:"embargos_icmbio",o:.8,q:1,leg:gleg(INDE+"ICMBio/ows","embargos_icmbio")},
- {g:"Ambiente",id:"bio",n:"Biomas",d:"Amazônia, Cerrado e demais. Indica a reserva legal exigida.",url:TB,l:"biomas_brasil",o:.35,q:1,leg:gleg(TB,"biomas_brasil")},
+ {g:"Ambiente",id:"bio",n:"Biomas",d:"Amazônia, Cerrado e demais. Indica a reserva legal exigida.",url:TB,l:"biomas_brasil",o:.35,q:1,single:1,leg:gleg(TB,"biomas_brasil")},
  {g:"Ambiente",id:"prodes",n:"Desmatamento mapeado (Prodes)",d:"Supressão de vegetação nativa detectada por satélite, por ano.",url:TB,l:"prodes_brasil",o:.7,q:0,leg:gleg(TB,"prodes_brasil")},
- {g:"Solo e chuva",id:"chuva",n:"Chuva média anual (faixas)",d:"Milímetros por ano, média de 1977 a 2006. Do claro (cerca de 400 mm) ao escuro (acima de 4.000 mm).",url:ANA,l:"3",o:.6,q:0,leg:ANA+"?request=GetLegendGraphic&version=1.3.0&format=image/png&layer=3"},
- {g:"Solo e chuva",id:"iso",n:"Isoietas (linhas de mesma chuva)",d:"Linhas com o valor da chuva anual em milímetros.",url:ANA,l:"4",o:1,q:0,leg:ANA+"?request=GetLegendGraphic&version=1.3.0&format=image/png&layer=4"},
+ {g:"Solo e chuva",id:"chuva",n:"Chuva média anual (faixas)",d:"Milímetros por ano, média de 1977 a 2006. Do claro (cerca de 400 mm) ao escuro (acima de 4.000 mm).",url:ANA,l:"3",o:.6,q:0,single:1,leg:ANA+"?request=GetLegendGraphic&version=1.3.0&format=image/png&layer=3"},
+ {g:"Solo e chuva",id:"iso",n:"Isoietas (linhas de mesma chuva)",d:"Linhas com o valor da chuva anual em milímetros.",url:ANA,l:"4",o:1,q:0,single:1,leg:ANA+"?request=GetLegendGraphic&version=1.3.0&format=image/png&layer=4"},
  {g:"Solo e chuva",id:"arg1",n:"Argila no solo, de 0 a 5 cm",d:"Em gramas por quilo: 350 equivale a 35% de argila.",url:SG,l:"clay_0-5cm_mean",o:.65,q:1,leg:SG+"&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=clay_0-5cm_mean&format=image/png&STYLE=default"},
  {g:"Solo e chuva",id:"arg2",n:"Argila no solo, de 15 a 30 cm",d:"Camada onde está a maior parte das raízes do capim.",url:SG,l:"clay_15-30cm_mean",o:.65,q:1,leg:SG+"&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=clay_15-30cm_mean&format=image/png&STYLE=default"},
  {g:"Solo e chuva",id:"arg3",n:"Argila no solo, de 60 a 100 cm",d:"Subsolo: indica drenagem e reserva de água na seca.",url:SG,l:"clay_60-100cm_mean",o:.65,q:1,leg:SG+"&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=clay_60-100cm_mean&format=image/png&STYLE=default"},
  {g:"Situação fundiária",id:"sigef",n:"Parcelas certificadas no Incra (Sigef)",d:"Imóveis medidos e certificados. Aparece a partir de zoom mais próximo.",url:"https://geoportal.incra.gov.br/geoserver/wms",l:"geonode:sigef_geo",o:.7,q:1,minZoom:9}
 ];
+map.createPane("unico").style.zIndex=210; map.getPane("unico").style.pointerEvents="none";
+map.createPane("wms").style.zIndex=220;
+var SLD_TI='<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld"><NamedLayer><Name>tis_poligonais</Name><UserStyle><FeatureTypeStyle><Rule><PolygonSymbolizer><Fill><CssParameter name="fill">#E07B00</CssParameter><CssParameter name="fill-opacity">0.55</CssParameter></Fill><Stroke><CssParameter name="stroke">#A35200</CssParameter><CssParameter name="stroke-width">1</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>';
+// camadas estáticas e grosseiras vêm em uma única imagem da região inteira: uma requisição em vez de dezenas
+var RB=L.latLngBounds([[-17,-56],[-1,-44]]),PJ=L.CRS.EPSG3857,rsw=PJ.project(RB.getSouthWest()),rne=PJ.project(RB.getNorthEast()),RW=1536,RH=Math.round(RW*(rne.y-rsw.y)/(rne.x-rsw.x));
+function oneImage(c){return c.url+(c.url.indexOf("?")<0?"?":"&")+"service=WMS&version=1.1.1&request=GetMap&layers="+encodeURIComponent(c.l)+"&styles=&format=image/png&transparent=true&srs=EPSG:3857&bbox="+[rsw.x,rsw.y,rne.x,rne.y].map(Math.round).join(",")+"&width="+RW+"&height="+RH;}
 var box=document.getElementById("layers"),curG="",state={};
 LAYERS.forEach(function(c){
   if(c.g!==curG){curG=c.g;var h=document.createElement("h2");h.textContent=curG;box.appendChild(h);}
   var div=document.createElement("div");div.className="layer";div.id="L_"+c.id;
   div.innerHTML='<label for="c_'+c.id+'"><input type="checkbox" id="c_'+c.id+'"><span>'+c.n+'</span></label><div class="d">'+c.d+'</div><div class="st" id="s_'+c.id+'"></div><div class="ctl"><input type="range" id="o_'+c.id+'" min="10" max="100" step="5" value="'+Math.round(c.o*100)+'" aria-label="Transparência de '+c.n+'">'+(c.leg?'<img class="leg" id="g_'+c.id+'" alt="Legenda de '+c.n+'" loading="lazy">':'')+'</div>';
   box.appendChild(div);
-  var lyr=L.tileLayer.wms(c.url,{layers:c.l,format:"image/png",transparent:true,version:"1.1.1",opacity:c.o,minZoom:c.minZoom||0,maxZoom:18,tileSize:512,attribution:"",className:c.cls||""});
+  var wopt={layers:c.l,format:"image/png",transparent:true,version:"1.1.1",opacity:c.o,minZoom:c.minZoom||0,maxZoom:18,tileSize:512,attribution:"",pane:"wms",updateWhenIdle:true,updateWhenZooming:false,keepBuffer:1};
+  if(c.sld) wopt.sld_body=SLD_TI;
+  var lyr=c.single?L.imageOverlay(oneImage(c),RB,{opacity:c.o,pane:"unico",interactive:false}):L.tileLayer.wms(c.url,wopt);
   var s={cfg:c,layer:lyr,ok:0,err:0};state[c.id]=s;
   var st=document.getElementById("s_"+c.id);
   function upd(){ if(!map.hasLayer(lyr)){st.textContent="";return;} if(c.minZoom&&map.getZoom()<c.minZoom){st.className="st";st.textContent="Aproxime o mapa para ver esta camada.";return;} if(s.err&&!s.ok){st.className="st err";st.textContent="O serviço não respondeu. Tente de novo mais tarde.";} else if(s.ok){st.className="st ok";st.textContent="Carregada.";} else {st.className="st";st.textContent="Carregando…";} }
   s.upd=upd;
-  lyr.on("tileload",function(){s.ok++;upd();});
-  lyr.on("tileerror",function(){s.err++;upd();});
+  lyr.on("tileload load",function(){s.ok++;upd();});
+  lyr.on("tileerror error",function(){s.err++;upd();});
   lyr.on("loading",function(){upd();});
   var cb=document.getElementById("c_"+c.id);
-  cb.onchange=function(){ if(cb.checked){s.ok=0;s.err=0;lyr.addTo(map);div.classList.add("on");var g=document.getElementById("g_"+c.id);if(g&&!g.src){g.onerror=function(){g.style.display="none";};g.src=c.leg;}} else {map.removeLayer(lyr);div.classList.remove("on");} upd(); };
+  cb.onchange=function(){ if(cb.checked){if(!c.single){s.ok=0;s.err=0;}lyr.addTo(map);div.classList.add("on");var g=document.getElementById("g_"+c.id);if(g&&!g.src){g.onerror=function(){g.style.display="none";};g.src=c.leg;}} else {map.removeLayer(lyr);div.classList.remove("on");} upd(); };
   document.getElementById("o_"+c.id).oninput=function(e){lyr.setOpacity(e.target.value/100);};
   if(c.on){cb.checked=true;cb.onchange();}
 });
@@ -187,15 +218,78 @@ var ptsLayer=L.layerGroup();
 PTS.forEach(function(p,i){L.marker([p[0],p[1]],{icon:L.divIcon({className:"",html:'<div class="cpt'+(p[4]?" al":"")+'">'+(p[4]?"!":(i+1))+'</div>',iconSize:[26,26],iconAnchor:[13,13]})}).bindPopup("<b>"+p[2]+"</b><br>"+p[3]).addTo(ptsLayer);});
 (function(){var h=document.createElement("h2");h.textContent="Conflitos e alertas";box.appendChild(h);var div=document.createElement("div");div.className="layer";div.innerHTML='<label for="c_pts"><input type="checkbox" id="c_pts" checked><span>Municípios com mais conflitos e alertas fundiários</span></label><div class="d"><span class="sw" style="background:#B0342B"></span>mais conflitos (CPT) <span class="sw" style="background:#9A5F06;margin-left:8px"></span>alerta recente</div>';box.appendChild(div);ptsLayer.addTo(map);document.getElementById("c_pts").onchange=function(e){if(e.target.checked)ptsLayer.addTo(map);else map.removeLayer(ptsLayer);};})();
 
+// frigoríficos (cidade da planta) e limites municipais
+var FRIG=[
+ [-10.175,-48.882,"Paraíso do Tocantins (TO)","Plena Alimentos"],
+ [-7.191,-48.207,"Araguaína (TO)","Minerva, LKJ"],
+ [-7.632,-48.425,"Nova Olinda (TO)","Masterboi"],
+ [-11.729,-49.069,"Gurupi (TO)","Cooperfrigu"],
+ [-12.478,-49.125,"Alvorada (TO)","Boi Brasil (referência de 2015)"],
+ [-5.369,-49.117,"Marabá (PA)","JBS"],
+ [-7.095,-49.943,"Xinguara (PA)","Mercúrio, Frigorífico Tavares da Silva"],
+ [-8.028,-50.031,"Redenção (PA)","JBS"],
+ [-6.747,-51.154,"Tucumã (PA)","JBS"],
+ [-9.328,-50.343,"Santana do Araguaia (PA)","JBS"],
+ [-10.644,-51.570,"Confresa (MT)","JBS"],
+ [-14.050,-52.160,"Água Boa (MT)","JBS"],
+ [-15.890,-52.257,"Barra do Garças (MT)","JBS"]
+];
+var frigLayer=L.layerGroup();
+FRIG.forEach(function(f){L.marker([f[0],f[1]],{icon:L.divIcon({className:"",html:'<div class="frg">F</div>',iconSize:[22,22],iconAnchor:[11,11]})}).bindPopup("<b>"+f[2]+"</b><br>Frigorífico com inspeção federal: "+f[3]+".<br>Confirme se a unidade está operando e comprando.").addTo(frigLayer);});
+function km(a,b,c,d){var R=6371,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,q=Math.sin(x/2)*Math.sin(x/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)*Math.sin(y/2);return 2*R*Math.asin(Math.sqrt(q));}
+var IBGE="https://servicodados.ibge.gov.br/api/",UFS=[[15,"PA"],[17,"TO"],[51,"MT"]],MUN=null,munList=[],munName={};
+function norm(t){return String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();}
+function loadMun(){
+  if(MUN) return MUN;
+  MUN=Promise.all(UFS.map(function(u){return fetch(IBGE+"v1/localidades/estados/"+u[0]+"/municipios").then(function(r){return r.json();}).then(function(a){a.forEach(function(m){munList.push({id:String(m.id),nome:m.nome,uf:u[1],k:norm(m.nome),kk:norm(m.nome+" ("+u[1]+")")});munName[String(m.id)]=m.nome+" ("+u[1]+")";});});})).then(function(){
+    munList.sort(function(a,b){return a.k<b.k?-1:1;});
+    var dl=document.getElementById("munis"),h="";munList.forEach(function(m){h+='<option value="'+m.nome.replace(/"/g,"&quot;")+" ("+m.uf+')">';});dl.innerHTML=h;
+  });
+  MUN.catch(function(){MUN=null;});
+  return MUN;
+}
+var munSel=L.geoJSON(null,{style:{color:"#1F3A8A",weight:3,fill:false},interactive:false}).addTo(map);
+var qst=document.getElementById("qst"),qin=document.getElementById("q");
+function goMun(){
+  var t=norm(qin.value); if(!t) return;
+  qst.className="st";qst.textContent="Procurando…";
+  loadMun().then(function(){
+    var m=munList.filter(function(x){return x.kk===t||x.k===t;})[0]||munList.filter(function(x){return x.k.indexOf(t)===0;})[0]||munList.filter(function(x){return x.k.indexOf(t)>=0;})[0];
+    if(!m){qst.className="st err";qst.textContent="Não achei esse município no PA, TO ou MT.";return;}
+    return fetch(IBGE+"v3/malhas/municipios/"+m.id+"?formato=application/vnd.geo%2Bjson").then(function(r){return r.json();}).then(function(g){
+      munSel.clearLayers();munSel.addData(g);map.fitBounds(munSel.getBounds(),{padding:[30,30]});
+      qst.className="st ok";qst.textContent=m.nome+" ("+m.uf+"): contorno em azul.";
+    });
+  }).catch(function(){qst.className="st err";qst.textContent="O serviço do IBGE não respondeu. Tente de novo.";});
+}
+document.getElementById("go").onclick=goMun;
+qin.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();goMun();}});
+qin.addEventListener("focus",function(){loadMun();});
+var limLayer=L.geoJSON(null,{style:{color:"#4A4A4A",weight:1,opacity:.7,fill:false},onEachFeature:function(f,l){l.bindTooltip(function(){return munName[String(f.properties.codarea)]||"";},{sticky:true});}}),limLoaded=0;
+function loadLim(st){
+  if(limLoaded) return; limLoaded=1; st.className="st";st.textContent="Carregando…";
+  Promise.all([loadMun()].concat(UFS.map(function(u){return fetch(IBGE+"v3/malhas/estados/"+u[0]+"?intrarregiao=municipio&qualidade=minima&formato=application/vnd.geo%2Bjson").then(function(r){return r.json();}).then(function(g){limLayer.addData(g);});}))).then(function(){st.className="st ok";st.textContent="Carregada. Passe o mouse na linha para ver o nome.";}).catch(function(){limLoaded=0;st.className="st err";st.textContent="O serviço do IBGE não respondeu. Tente de novo mais tarde.";});
+}
+(function(){
+  var h=document.createElement("h2");h.textContent="Referência";box.appendChild(h);
+  var d1=document.createElement("div");d1.className="layer";d1.innerHTML='<label for="c_frig"><input type="checkbox" id="c_frig" checked><span>Cidades com frigorífico de inspeção federal</span></label><div class="d"><span class="sw" style="background:#1F3A8A"></span>Com a camada ligada, o clique no mapa informa o mais próximo em linha reta.</div>';box.appendChild(d1);
+  frigLayer.addTo(map);document.getElementById("c_frig").onchange=function(e){if(e.target.checked)frigLayer.addTo(map);else map.removeLayer(frigLayer);};
+  var d2=document.createElement("div");d2.className="layer";d2.innerHTML='<label for="c_lim"><input type="checkbox" id="c_lim"><span>Limites municipais (IBGE)</span></label><div class="d">Pará, Tocantins e Mato Grosso.</div><div class="st" id="s_lim"></div>';box.appendChild(d2);
+  document.getElementById("c_lim").onchange=function(e){var st=document.getElementById("s_lim");if(e.target.checked){limLayer.addTo(map);loadLim(st);}else{map.removeLayer(limLayer);st.textContent="";}};
+})();
+
 // clique: consulta o que há no ponto em cada camada ligada
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 var KEEP=/^(nome|nome_uc|terrai_nom|etnia_nome|fase_ti|modalidade|categoria|grupo|esfera|uf|bioma|org_gestor|cria_ato|ha_total|superficie|municipio|municipio_|nome_area|parcela_co|codigo_imo|situacao_i|status|data_aprov|registro_m|art|num_auto|data_embar|area_ha|desc_infra|autuado)/i;
 map.on("click",function(e){
   var act=LAYERS.filter(function(c){return c.q&&map.hasLayer(state[c.id].layer)&&!(c.minZoom&&map.getZoom()<c.minZoom);});
+  var parts=[],HR="<hr style='border:0;border-top:1px solid #ddd;margin:6px 0'>";
+  if(map.hasLayer(frigLayer)){ var best=null; FRIG.forEach(function(f){var d=km(e.latlng.lat,e.latlng.lng,f[0],f[1]); if(!best||d<best[0]) best=[d,f];}); parts.push("<b>Frigorífico mais próximo</b><br>"+esc(best[1][2])+", cerca de "+Math.round(best[0]/5)*5+" km em linha reta. Por estrada costuma ser 20% a 40% mais."); }
+  if(!act.length&&!parts.length) return;
+  var pop=L.popup({maxWidth:330}).setLatLng(e.latlng).setContent(act.length?"Consultando…":parts.join(HR)).openOn(map);
   if(!act.length) return;
-  var pop=L.popup({maxWidth:330}).setLatLng(e.latlng).setContent("Consultando…").openOn(map);
-  var sz=map.getSize(),b=map.getBounds(),pt=map.latLngToContainerPoint(e.latlng),parts=[],left=act.length;
-  function done(){ if(--left<=0) pop.setContent(parts.join("<hr style='border:0;border-top:1px solid #ddd;margin:6px 0'>")||"Nada encontrado neste ponto nas camadas ligadas."); }
+  var sz=map.getSize(),b=map.getBounds(),pt=map.latLngToContainerPoint(e.latlng),left=act.length;
+  function done(){ if(--left<=0) pop.setContent(parts.join(HR)||"Nada encontrado neste ponto nas camadas ligadas."); }
   act.forEach(function(c){
     var isMs=c.url.indexOf("mapserv")>=0;
     var u=c.url+(c.url.indexOf("?")<0?"?":"&")+"service=WMS&version=1.1.1&request=GetFeatureInfo&layers="+encodeURIComponent(c.l)+"&query_layers="+encodeURIComponent(c.l)+"&styles=&srs=EPSG:4326&bbox="+[b.getWest(),b.getSouth(),b.getEast(),b.getNorth()].join(",")+"&width="+sz.x+"&height="+sz.y+"&x="+Math.round(pt.x)+"&y="+Math.round(pt.y)+"&feature_count=2&info_format="+(isMs?"text/html":"text/plain");
