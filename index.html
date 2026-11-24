@@ -125,10 +125,10 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
 <header class="top"><div class="wrap">
   <p class="eyebrow">Marianópolis do Tocantins · recria e engorda a pasto · APA do Cantão</p>
   <h1>Viabilidade e crédito da fazenda</h1>
-  <p class="lede">Calculadora de break-even, diagnóstico do material anterior, linhas de crédito da safra 2026/27 e o caminho para montar o projeto no banco. Contas reconferidas em 23/11 e revisadas em 24/11/2026.</p>
+  <p class="lede">Calculadora de break-even, diagnóstico do material anterior, linhas de crédito da safra 2026/27 e o caminho para montar o projeto no banco. Inclui três modelos de negócio, opções de crédito e comparação de cenários. Versão de 24/11/2026.</p>
 </div></header>
 <nav class="toc" aria-label="Seções"><div class="wrap">
-  <a href="#calculadora">Calculadora</a><a href="#reconferencia">Reconferência</a><a href="#diagnostico">Diagnóstico</a><a href="#investimento">Investimento</a><a href="#fluxo">Fluxo de 12 anos</a><a href="#credito">Crédito</a><a href="#contatos">Com quem falar</a><a href="#documentos">Documentos</a><a href="#projeto">Projeto</a><a href="#modelos">Modelos</a><a href="#confirmar">A confirmar</a><a href="#fontes">Fontes</a>
+  <a href="#calculadora">Calculadora</a><a href="#modelosneg">Modelos de negócio</a><a href="#cenarios">Cenários A e B</a><a href="#reconferencia">Reconferência</a><a href="#diagnostico">Diagnóstico</a><a href="#investimento">Investimento</a><a href="#fluxo">Fluxo de 12 anos</a><a href="#credito">Crédito</a><a href="#contatos">Com quem falar</a><a href="#documentos">Documentos</a><a href="#projeto">Projeto</a><a href="#modelos">Modelos</a><a href="#confirmar">A confirmar</a><a href="#fontes">Fontes</a>
 </div></nav>
 
 <main>
@@ -141,6 +141,11 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
       <button type="button" data-preset="antigo" aria-pressed="false">Modelo antigo (R$ 235 e R$ 2.150)</button>
       <button type="button" data-preset="estresse" aria-pressed="false">Estresse (boi R$ 300, bezerro R$ 3.600)</button>
     </div>
+    <div class="presets"><span class="lbl">Modelo de negócio:</span>
+      <button type="button" data-sis="0">Recria e engorda com gado próprio</button>
+      <button type="button" data-sis="1">Só recria: compra bezerro, vende boi magro</button>
+      <button type="button" data-sis="2">Engorda em parceria: gado de terceiro</button>
+    </div>
     <div class="presets"><span class="lbl">Modelo de terra:</span>
       <button type="button" data-model="original">Comprar e reformar área degradada</button>
       <button type="button" data-model="arrendar">Arrendar pasto pronto (aluguel de exemplo: R$ 600/ha por ano)</button>
@@ -149,6 +154,10 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
       <button type="button" data-taxa="7.8">Receita até R$ 4,8 mi: 7,80%</button>
       <button type="button" data-taxa="8.16">Até R$ 16 mi: 8,16%</button>
       <button type="button" data-taxa="9.15">Até R$ 90 mi: 9,15%</button>
+    </div>
+    <div class="presets"><span class="lbl">Cenários:</span>
+      <button type="button" data-save="A">Guardar como A</button>
+      <button type="button" data-save="B">Guardar como B</button>
       <button type="button" id="reset">Restaurar todos os padrões</button>
     </div>
   </div>
@@ -160,6 +169,16 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
       <div class="kpis" id="kpis"></div>
     </div>
   </div>
+
+  <h3 id="modelosneg">Modelos de negócio lado a lado</h3>
+  <p class="sub">Os mesmos preços, custos e rebanho digitados, trocando só o modelo de negócio e o modelo de terra. A linha marcada é a combinação em uso. No arrendamento vale o aluguel digitado; se estiver zerado, entra o exemplo de R$ 600/ha. A recria usa giro de 12 meses e os outros dois, 24, salvo no modelo em uso, que segue o giro digitado.</p>
+  <div class="tw"><table id="tModels"></table></div>
+  <p class="note">Só recria: sem semiconfinamento, sem conjunto de silagem e sem frete de venda (o comprador busca). Parceria: o dono do gado entrega os animais, você recebe uma parte do valor das arrobas ganhas (peso vivo ÷ 30) e não compra bezerro nem paga frete; a receita só entra quando o lote sai. O percentual da parceria e o preço do boi magro são exemplos, não cotações.</p>
+
+  <h3 id="cenarios">Cenários A e B</h3>
+  <p class="sub">Use "Guardar como A" e "Guardar como B" para fixar dois conjuntos de premissas e comparar com o que está na tela. Ficam salvos neste navegador.</p>
+  <div class="tw"><table id="tAB"></table></div>
+  <div class="presets" style="margin-top:10px"><button type="button" data-load="A">Carregar A na calculadora</button><button type="button" data-load="B">Carregar B na calculadora</button><button type="button" data-load="clear">Apagar A e B</button></div>
 
   <h3>Resultado anual por tamanho de rebanho</h3>
   <p class="sub">Mesmos preços e custos, variando só o rebanho. A linha marcada é o rebanho que você digitou. Investimento sem a terra; "próprio até 1ª venda" é o dinheiro do bolso antes da primeira receita, também sem a terra.</p>
@@ -176,10 +195,10 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
     </div>
   </div>
 
-  <h3>Sensibilidade: resultado depois dos juros, boi (colunas) × bezerro (linhas)</h3>
+  <h3 id="sensT">Sensibilidade: resultado depois dos juros, boi (colunas) × bezerro (linhas)</h3>
   <p class="sub">Verde sobra caixa depois de pagar os juros, vermelho falta, amarelo está no limite. Valores em R$ mil por ano, com o rebanho digitado.</p>
   <div class="tw"><table id="tSens"></table></div>
-  <p class="note">A planilha v3 ainda não tem o arrendamento, a reserva de reposição, o prazo separado do gado nem a CBS; nesses pontos vale a calculadora. Simplificações: regime estável (compra e venda todos os anos), sem imposto de renda e sem inflação; juros do ano com saldo cheio; amortização constante depois da carência. O rebanho mínimo é procurado de 10 em 10 cabeças. A planilha v3 faz a mesma conta e os dois foram comparados.</p>
+  <p class="note">Simplificações: regime estável (compra e venda todos os anos), sem imposto de renda e sem inflação. Os níveis 2 e 3 usam os juros sobre a maior dívida do fluxo e a maior parcela de principal, que é o ano mais apertado. Amortização constante depois da carência. O rebanho mínimo é procurado de 10 em 10 cabeças. A planilha v4 traz o modelo de recria e engorda com terra comprada ou arrendada; os modelos de recria e de parceria, o custeio financiado e os juros capitalizados estão só nesta calculadora.</p>
 </div></section>
 
 <section id="reconferencia"><div class="wrap">
@@ -202,6 +221,15 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
       <li><span class="tag fix">A confirmar</span><strong>Reserva legal.</strong> O mapa de biomas põe Marianópolis no Cerrado (35%), mas a lei olha o tipo de vegetação do imóvel; se for floresta, são 80%. Só o CAR analisado responde.</li>
       <li><span class="tag fix">A confirmar</span><strong>CBS e IBS a partir de 2027.</strong> Produtor com receita acima de R$ 3,6 milhões por ano vira contribuinte. A calculadora avisa quando a receita passa do limite e tem um campo para a alíquota líquida, que depende dos créditos e deve vir do contador.</li>
       <li><span class="tag err">Atenção</span><strong>Área em regeneração.</strong> Área parada há mais de cinco anos deixa de ser pousio. A destoca passa a ser supressão de vegetação, exige autorização, e desmatamento irregular trava o crédito rural.</li>
+    </ul>
+    <h3>Segunda rodada, 24/11/2026</h3>
+    <ul>
+      <li><span class="tag fix">Novo</span><strong>Só recria e engorda em parceria.</strong> Dois modelos que pedem menos capital. Com os números de exemplo, nenhum dos dois resolve sozinho: a recria deixa margem pequena por cabeça com o bezerro caro, e a parceria só fecha quando o dono do gado paga suplemento e sanidade e a área é arrendada pronta.</li>
+      <li><span class="tag fix">Novo</span><strong>Juros capitalizados na carência.</strong> A programação do FNO 2026 permite capitalizar até 100% dos juros na carência. Alivia o caixa dos primeiros anos e aumenta a dívida: no projeto original, R$ 5,0 milhões viram cerca de R$ 6,3 milhões ao fim de três anos.</li>
+      <li><span class="tag fix">Novo</span><strong>Custeio financiado.</strong> O FNO Rural admite custeio associado ao investimento, em regra até 40% do total financiado. Só aparece na conta se sobrar limite depois do investimento.</li>
+      <li><span class="tag fix">Novo</span><strong>Cenários A e B</strong> e a tabela de modelos lado a lado.</li>
+      <li><span class="tag fix">A confirmar</span><strong>Parcela financiável.</strong> A mesma programação indica teto de 80% do investimento para o porte pequeno-médio, 75% para o médio I e 60% para médio II e grande, variando com a classificação do município. O campo "Parcela financiável" está em 100%; ajuste quando o banco confirmar o seu porte.</li>
+      <li><span class="tag ok">Confere</span>A versão nova da conta foi comparada com a anterior em 15 cenários. Os resultados são iguais, exceto com carência zero, em que a amortização agora segue o saldo de cada ano.</li>
     </ul>
     <p><strong>A conclusão de fundo:</strong> no projeto original o negócio rende cerca de 5% ao ano sobre o capital investido, e o crédito custa 7,8%. Enquanto o retorno for menor que o juro, mais dívida piora o resultado. O que muda o quadro é investir menos por cabeça ou ganhar mais por cabeça.</p>
     <p><strong>O que não muda:</strong> a amortização não é paga em nenhum cenário testado, o investimento sem a terra passa de R$ 5 milhões, e os dois primeiros anos sem venda exigem recurso próprio.</p>
@@ -262,7 +290,8 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
   </table></div>
   <div class="prose" style="margin-top:16px">
     <p><strong>Terra.</strong> Não encontrei linha subsidiada para compra de terra neste porte. O crédito fundiário federal atende agricultor sem terra ou com pouca terra. Sobra o parcelamento com o vendedor ou crédito a taxa de mercado.</p>
-    <p><strong>O gargalo não é a taxa.</strong> O banco empresta pela capacidade de pagamento e pelas garantias. Três coisas ajudam mais do que meio ponto de juros: pedir carência longa, dividir o pedido (pastagem no RenovAgro, o restante no FNO) e chegar ao banco sabendo que garantia oferecer, já que terra comprada a prazo dificilmente serve.</p>
+    <p><strong>Juros na carência e custeio.</strong> Pela programação do FNO 2026, os encargos de operações rurais podem ser capitalizados na carência, e o FNO Rural aceita custeio associado ao investimento, em regra até 40% do total (até 80% com justificativa da assistência técnica). O prazo do investimento fixo é de até 12 anos e o do semifixo, até 10, os dois com carência de até 6. Tudo depende da análise do banco.</p>
+    <p><strong>O gargalo não é a taxa.</strong> O banco empresta pela capacidade de pagamento e pelas garantias. Três coisas ajudam mais do que meio ponto de juros: ajustar a carência ao primeiro giro do gado (carência longa demais encurta o prazo de pagar o principal), dividir o pedido (pastagem no RenovAgro, o restante no FNO) e chegar ao banco sabendo que garantia oferecer, já que terra comprada a prazo dificilmente serve.</p>
   </div>
 </div></section>
 
@@ -321,7 +350,7 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
     <li><div><strong>Viabilidade econômica.</strong> Fluxo de caixa e capacidade de pagamento, no formato do banco.</div></li>
     <li><div><strong>Protocolo, análise, vistoria e contratação.</strong> A liberação é em parcelas, conforme a obra anda.</div></li>
   </ol>
-  <p class="note">A planilha v3 e esta calculadora já cobrem orçamento, custeio, fluxo de 12 anos e capacidade de pagamento. O projetista adapta ao sistema do banco e confere os números em campo.</p>
+  <p class="note">A planilha v4 e esta calculadora já cobrem orçamento, custeio, fluxo de 12 anos e capacidade de pagamento. O projetista adapta ao sistema do banco e confere os números em campo.</p>
 </div></section>
 
 <section id="modelos"><div class="wrap">
@@ -344,13 +373,15 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
     <tr><th>Premissa</th><th>Valor usado</th><th>Por que importa</th></tr>
     <tr><td><strong>Preço da terra</strong></td><td>R$ 10.000/ha, entrada de 20%, 5 parcelas</td><td>É o maior número do projeto e não estava em nenhum arquivo. Anúncios na região pedem de R$ 12 mil a R$ 16 mil por hectare.</td></tr>
     <tr><td><strong>Arrendamento</strong></td><td>R$ 600/ha por ano, no botão de exemplo</td><td>Não é cotação. O valor da região define se arrendar compensa.</td></tr>
+    <tr><td><strong>Boi magro</strong></td><td>R$ 4.800 por cabeça de 12 @</td><td>Exemplo. A Agrolink mostrava R$ 4.500 a R$ 4.800 em praças do Paraná e média de R$ 5.070 em 13/11/2026; não achei cotação do Tocantins.</td></tr>
+    <tr><td><strong>Parceria de engorda</strong></td><td>50% do valor da arroba ganha; custos por sua conta</td><td>Exemplo. Percentual, quem paga suplemento e sanidade e quem assume a mortalidade variam de contrato para contrato.</td></tr>
     <tr><td><strong>Vida útil</strong></td><td>Pasto 10 anos, máquinas 10, benfeitorias 20</td><td>Definem a reserva de reposição. Pasto mal manejado dura menos.</td></tr>
     <tr><td><strong>Preço do bezerro</strong></td><td>R$ 3.600</td><td>Cotações do Tocantins variaram de R$ 3.300 a R$ 3.980 entre setembro e novembro. É a variável que mais mexe no resultado.</td></tr>
     <tr><td><strong>Custo de funcionário</strong></td><td>R$ 5.000/mês com encargos</td><td>O modelo anterior usava R$ 4.000.</td></tr>
     <tr><td><strong>Máquinas e silagem</strong></td><td>R$ 380 mil + R$ 150 mil</td><td>Se terceirizar, zere esses dois e volte a silagem para cerca de R$ 0,22/kg.</td></tr>
     <tr><td><strong>Silagem e concentrado</strong></td><td>R$ 0,12/kg e R$ 1,70/kg</td><td>Definem o custo da terminação.</td></tr>
     <tr><td><strong>Administração</strong></td><td>R$ 8.000/mês</td><td>Contabilidade, assistência técnica, energia, ITR.</td></tr>
-    <tr><td><strong>Carência e taxa</strong></td><td>3 anos; 7,80% a.a.</td><td>Dependem do enquadramento e da análise do banco. Juros pagos todo ano, inclusive na carência.</td></tr>
+    <tr><td><strong>Carência e taxa</strong></td><td>3 anos; 7,80% a.a.</td><td>Dependem do enquadramento e da análise do banco. Por padrão a conta paga os juros todo ano; a opção de capitalizar na carência está no grupo Crédito.</td></tr>
     <tr><td><strong>Cerca de divisa</strong></td><td>100% a construir</td><td>Se já existe cerca, o investimento cai.</td></tr>
     <tr><td><strong>Compra dos bezerros</strong></td><td>Lotes anuais iguais</td><td>Comprar tudo de uma vez adia a primeira venda e concentra o risco de preço.</td></tr>
   </table></div>
@@ -362,6 +393,8 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
     <li><a href="https://www.agrolink.com.br/regional/to/rio-da-conceicao/cotacoes">Agrolink, cotações do Tocantins</a>: boi gordo em Paraíso do Tocantins a R$ 376/@ em 18/11/2026.</li>
     <li><a href="https://www.noticiasagricolas.com.br/cotacoes/boi-gordo">Notícias Agrícolas (Scot e Datagro)</a>: reposição Nelore no Tocantins e relação de troca do desmama.</li>
     <li><a href="https://cdn.bancoamazonia.com.br/bancoamazonia/Programacao_Financeira_FNO_2026_2_4c915e06ff.pdf">Banco da Amazônia, Programação FNO 2026</a>: taxas por porte, bônus de adimplência, limite financiável.</li>
+    <li><a href="https://www.gov.br/mdr/pt-br/assuntos/fundos-regionais-e-incentivos-fiscais/fundos-constitucionais-de-financiamento-fno-fne-e-fco/fundo-constitucional-de-financiamento-do-norte-fno/ProgramaoFinanceiraFNO2026.pdf">Ministério da Integração, Programação Financeira do FNO 2026</a>: capitalização dos encargos na carência, custeio associado, prazos e limites financiáveis.</li>
+    <li><a href="https://www.agrolink.com.br/cotacoes/boi-magro-1cab">Agrolink, boi magro</a>: referência de preço por cabeça em 13/11/2026.</li>
     <li><a href="https://www.bancoamazonia.com.br/linhas-de-fomento/fno/amazonia-rural">Banco da Amazônia, FNO Amazônia Rural</a>: prazos e carência.</li>
     <li><a href="https://www.bndes.gov.br/wps/portal/site/home/financiamento/produto/renovagro">BNDES, RenovAgro</a>: taxa e finalidades.</li>
     <li><a href="https://www.cnnbrasil.com.br/agro/governo-oficializa-plano-safra-2026-27-empresarial-de-r-5251-bilhoes/">CNN Brasil, Plano Safra 2026/27</a>: taxas do Pronamp e do Moderfrota.</li>
@@ -372,10 +405,10 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px}
 </div></section>
 </main>
 
-<footer><div class="wrap">Este material organiza contas e informações públicas para apoiar a sua análise. Não é consultoria financeira, jurídica ou contábil. Taxas e limites são os publicados; enquadramento, carência e garantias são definidos pelo banco.</div></footer>
+<footer><div class="wrap"><p>Versão de 24/11/2026. Preços de mercado de 13 a 18/11/2026.</p>Este material organiza contas e informações públicas para apoiar a sua análise. Não é consultoria financeira, jurídica ou contábil. Taxas e limites são os publicados; enquadramento, carência e garantias são definidos pelo banco.</div></footer>
 
 <script>
-// Modelo de recria-engorda a pasto. Mesma lógica da planilha v3.
+// Modelo de pecuária a pasto: recria-engorda própria (0), só recria (1), engorda em parceria (2).
 var DEFAULTS = {
   areaTotal: 1000, area: 500, rebanho: 750, lotMax: 1.3, piquete: 50,
   boi: 376, bez: 3600,
@@ -394,28 +427,35 @@ var DEFAULTS = {
   limite: 5000000, taxa: 0.078, prazo: 12, prazoGado: 10, carencia: 3, pctFin: 1,
   arrendar: 0, pastoPronto: 0, arrHa: 0,
   vidaPasto: 10, vidaMaq: 10, vidaBenf: 20,
-  cbsAliq: 0, cbsLimite: 3600000
+  cbsAliq: 0, cbsLimite: 3600000,
+  sistema: 0, pesoMagro: 12, precoMagro: 4800, parcPct: 0.5, parcCustos: 0,
+  pctCusteio: 0, capJuros: 0
 };
 
 function calc(p) {
   var r = {};
   var h = p.rebanho;
+  var recria = p.sistema === 1, parc = p.sistema === 2;
+  var diasSemi = recria ? 0 : p.diasSemi;          // só recria não termina o boi
+  var conj = recria ? 0 : p.conjSilagem;
+  var bez = parc ? 0 : p.bez;                      // na parceria o gado é de terceiro
+  var cli = (parc && p.parcCustos) ? 0 : 1;        // 0 = dono do gado paga suplemento e sanidade
   r.k = 12 / p.giro;
   r.mortCiclo = p.mort * p.giro / 12;
   r.s = r.k * (1 - r.mortCiclo);
   r.compras = h * r.k;
   r.vendas = h * r.s;
   r.pvIn = p.pesoEntrada * 30;
-  r.pvOut = p.pesoAbate * 15 / p.rend;
+  r.pvOut = recria ? p.pesoMagro * 30 : p.pesoAbate * 15 / p.rend;
   r.pesoMedio = (r.pvIn + r.pvOut) / 2;
   r.lotCab = h / p.area;
   r.lotUA = r.lotCab * r.pesoMedio / 450;
   r.cabMax = p.lotMax * 450 / r.pesoMedio * p.area;
   r.gmd = (r.pvOut - r.pvIn) / (p.giro * 30.4);
   r.diaria = p.silKg * p.silPreco + p.concKg * p.concPreco;
-  r.freteBoi = p.distKm * 2 * p.tarifaKm / p.boisCarreta;
-  r.cvEstoque = p.salKg * p.diasAguas * p.salPreco + p.diasSeca * p.protKg * p.protPreco + p.sanid;
-  r.cvVendida = p.diasSemi * r.diaria - p.diasSemi * p.protKg * p.protPreco + r.freteBoi;
+  r.freteBoi = (recria || parc) ? 0 : p.distKm * 2 * p.tarifaKm / p.boisCarreta;
+  r.cvEstoque = cli * (p.salKg * p.diasAguas * p.salPreco + p.diasSeca * p.protKg * p.protPreco + p.sanid);
+  r.cvVendida = cli * (diasSemi * r.diaria - diasSemi * p.protKg * p.protPreco) + r.freteBoi;
 
   // CAPEX
   var lado = Math.sqrt(p.area * 10000) / 1000;
@@ -429,15 +469,15 @@ function calc(p) {
   r.cBeb = pronto * Math.ceil(p.area / p.piquete) * p.bebedouro;
   r.cCurral = pronto * p.curral; r.cPoco = pronto * p.poco; r.cGalpao = pronto * p.galpao; r.cCasa = pronto * p.casa;
   r.benf = r.cCurral + r.cCercaExt + r.cCercaInt + r.cPoco + r.cBeb + r.cGalpao + r.cCasa;
-  r.maq = p.trator + p.conjSilagem;
+  r.maq = p.trator + conj;
   r.baseManut = r.benf + r.maq;
   r.cCochos = h * p.cochoCab;
-  r.haCapineira = r.vendas * p.diasSemi * p.silKg / 1000 / (1 - p.perdasSil) / p.prodCapiacu;
+  r.haCapineira = r.vendas * diasSemi * p.silKg / 1000 / (1 - p.perdasSil) / p.prodCapiacu;
   r.cCapineira = r.haCapineira * p.capineiraHa;
   r.subtotal = r.cPasto + r.baseManut + r.cCochos + r.cCapineira;
   r.cConting = r.subtotal * p.conting;
   r.imob = r.subtotal + r.cConting;
-  r.gado = h * p.bez;
+  r.gado = h * bez;
   r.capexSemTerra = r.imob + r.gado;
   r.terra = p.arrendar ? 0 : p.areaTotal * p.precoTerra;
   r.fin = Math.min(p.limite, p.pctFin * r.capexSemTerra);
@@ -448,83 +488,76 @@ function calc(p) {
   // OPEX
   r.oVaq = Math.ceil(h / p.cabVaq) * p.custoFunc * 12;
   r.oFixoPessoal = p.pessoalFixo * p.custoFunc * 12;
-  r.oSal = h * p.salKg * p.diasAguas * p.salPreco;
-  r.oProt = (h * p.diasSeca - r.vendas * p.diasSemi) * p.protKg * p.protPreco;
-  r.oSemi = r.vendas * p.diasSemi * r.diaria;
-  r.oSanid = h * p.sanid;
+  r.oSal = cli * h * p.salKg * p.diasAguas * p.salPreco;
+  r.oProt = cli * (h * p.diasSeca - r.vendas * diasSemi) * p.protKg * p.protPreco;
+  r.oSemi = cli * r.vendas * diasSemi * r.diaria;
+  r.oSanid = cli * h * p.sanid;
   r.oDiesel = p.area * p.dieselLHa * p.diesel;
   r.oManut = p.area * p.manutHa;
   r.oManutMaq = p.manutPct * r.baseManut;
   r.oAdmin = p.adminMes * 12;
   r.oFrete = r.vendas * r.freteBoi;
-  r.receita = r.vendas * p.pesoAbate * p.boi;
+  r.ganhoArr = (r.pvOut - r.pvIn) / 30;             // arrobas vivas ganhas por cabeça
+  r.recCab = recria ? p.precoMagro : parc ? r.ganhoArr * p.boi * p.parcPct : p.pesoAbate * p.boi;
+  r.precoRef = recria ? p.precoMagro : p.boi;
+  r.receita = r.vendas * r.recCab;
+  r.unidRec = r.receita / r.precoRef;
   r.oFunrural = p.funrural * r.receita;
   r.oCbs = p.cbsAliq * r.receita;
   r.oArrend = p.arrendar ? p.area * p.arrHa : 0;
   r.fixos = r.oFixoPessoal + r.oDiesel + r.oManut + r.oManutMaq + r.oAdmin + r.oArrend;
   r.opex = r.oVaq + r.oFixoPessoal + r.oSal + r.oProt + r.oSemi + r.oSanid + r.oDiesel + r.oManut + r.oManutMaq + r.oAdmin + r.oArrend + r.oFrete + r.oFunrural + r.oCbs;
-  r.repos = r.compras * p.bez;
+  r.repos = r.compras * bez;
   r.margemBruta = r.receita - r.repos;
   r.ebitda = r.margemBruta - r.opex;
-  r.juros = r.fin * p.taxa;
-  r.anosAmort = Math.max(1, p.prazo - p.carencia);
-  r.anosAmortGado = Math.max(1, Math.min(p.prazo, p.prazoGado) - p.carencia);
-  r.amort = r.finImob / r.anosAmort + r.finGado / r.anosAmortGado;
+  var prazo = Math.min(12, Math.max(1, p.prazo)), car = Math.min(prazo - 1, Math.max(0, p.carencia));
+  var prazoG = Math.max(car + 1, Math.min(prazo, p.prazoGado));
+  r.anosAmort = prazo - car;
+  r.anosAmortGado = prazoG - car;
   r.parcelaTerra = r.terra * (1 - p.entradaTerra) / p.parcelasTerra;
-  r.n1 = r.ebitda;
-  r.n2 = r.ebitda - r.juros;
-  r.n3 = r.n2 - r.amort;
-  r.n4 = r.n3 - r.parcelaTerra;
-  r.dividaMax = Math.max(0, r.ebitda) / (p.taxa + (r.fin > 0 ? r.amort / r.fin : 1 / r.anosAmort));
-  r.reserva = p.area * p.pastoHa / Math.max(1, p.vidaPasto) + r.maq / Math.max(1, p.vidaMaq) + r.benf / Math.max(1, p.vidaBenf);
-  r.n1r = r.n1 - r.reserva;
-  r.roi = r.capexSemTerra > 0 ? r.n1 / r.capexSemTerra : 0;
 
-  // indicadores
-  r.arrVend = r.vendas * p.pesoAbate;
-  r.arrProd = r.arrVend - r.compras * p.pesoEntrada;
-  r.arrHa = r.arrProd / p.area;
-  r.custoArrVend = (r.repos + r.opex) / r.arrVend;
-  r.custoArrProd = r.opex / r.arrProd;
-  r.agio = (p.bez / p.pesoEntrada) / p.boi - 1;
-  r.margemCabVendida = p.pesoAbate * p.boi - p.bez / (1 - r.mortCiclo);
-
-  // preços de equilíbrio com o rebanho atual
-  var den = r.arrVend * (1 - p.funrural - p.cbsAliq);
-  var custoSemFunr = r.repos + r.opex - r.oFunrural - r.oCbs;
-  var extras = [0, r.juros, r.juros + r.amort, r.juros + r.amort + r.parcelaTerra];
-  r.boiMin = extras.map(function (x) { return (custoSemFunr + x) / den; });
-  r.bezMax = extras.map(function (x) { return (r.ebitda - x) / r.compras + p.bez; });
-
-  // fluxo de 12 anos
-  var L = Math.ceil(p.giro / 12), acum = 0, acumST = 0, saldo = 0, lib = 0;
-  var libs = [], fl = [];
-  for (var t = 0; t <= 12; t++) {
+  // fluxo de 12 anos (o crédito do regime estável sai daqui)
+  var L = Math.ceil(p.giro / 12), t;
+  var custCap = Math.max(0, p.limite - r.fin), libInv = 0, libCus = 0, fl = [];
+  r.custeioPre = 0;
+  for (t = 0; t <= 12; t++) {
     var herd = Math.min(h, t * h * r.k);
     var comp = t >= 1 ? h * r.k : 0;
     var vend = t > L ? h * r.s : 0;
-    var rec = vend * p.pesoAbate * p.boi;
-    var compraR = comp * p.bez;
+    var rec = vend * r.recCab;
+    var compraR = comp * bez;
     var op = herd * r.cvEstoque + vend * r.cvVendida +
       (herd > 0 ? r.fixos + Math.ceil(herd / p.cabVaq) * p.custoFunc * 12 : p.adminMes * 12 + p.pessoalFixo * p.custoFunc * 12 + r.oArrend) +
       (p.funrural + p.cbsAliq) * rec;
     var capexT = t === 0 ? r.imob : 0;
-    var liberacao = t <= L ? Math.max(0, Math.min(p.limite - lib, p.pctFin * (capexT + compraR))) : 0;
-    lib += liberacao;
-    libs.push(liberacao);
-    fl.push({ t: t, herd: herd, vend: vend, rec: rec, compra: compraR, opex: op, capex: capexT, lib: liberacao });
+    var lI = 0, lG = 0, lC = 0;
+    if (t <= L) {
+      lI = Math.max(0, Math.min(r.fin - libInv, p.pctFin * capexT)); libInv += lI;
+      lG = Math.max(0, Math.min(r.fin - libInv, p.pctFin * compraR)); libInv += lG;
+      lC = Math.max(0, Math.min(custCap - libCus, p.pctCusteio * op)); libCus += lC;
+      r.custeioPre += op;
+    }
+    fl.push({ t: t, herd: herd, vend: vend, rec: rec, compra: compraR, opex: op, capex: capexT, lI: lI, lG: lG + lC });
   }
-  var libImob = libs[0], libGado = lib - libs[0];
+  r.finCust = libCus;
+  r.finTotal = libInv + libCus;
+  var sI = 0, sG = 0, acum = 0, acumST = 0;
   r.fluxo = [];
-  r.picoSem = 0; r.picoCom = 0; r.rpSem = 0; r.rpCom = 0; r.cobMin = null;
+  r.picoSem = 0; r.picoCom = 0; r.rpSem = 0; r.rpCom = 0; r.cobMin = null; r.divida = 0; r.amort = 0;
   for (t = 0; t <= 12; t++) {
     var f = fl[t];
-    var jur = saldo * p.taxa;
-    var am = ((t > p.carencia && t <= p.prazo) ? libImob / r.anosAmort : 0) + ((t > p.carencia && t <= Math.min(p.prazo, p.prazoGado)) ? libGado / r.anosAmortGado : 0);
+    var jI = sI * p.taxa, jG = sG * p.taxa, jur = jI + jG, capz = 0;
+    if (p.capJuros && t <= car) { capz = jur; jur = 0; sI += jI; sG += jG; }
+    var amI = t > prazo ? sI : (t > car ? sI / (prazo - t + 1) : 0);
+    var amG = t > prazoG ? sG : (t > car ? sG / (prazoG - t + 1) : 0);
+    var am = amI + amG, lib = f.lI + f.lG;
+    sI += f.lI - amI; sG += f.lG - amG;
+    var saldo = sI + sG;
+    if (saldo > r.divida) r.divida = saldo;
+    if (am > r.amort) r.amort = am;
     var terraT = t === 0 ? r.terra * p.entradaTerra : (t <= p.parcelasTerra ? r.parcelaTerra : 0);
     var caixaOp = f.rec - f.compra - f.opex;
-    var semTerra = caixaOp - f.capex + f.lib - jur - am;
-    saldo = saldo + f.lib - am;
+    var semTerra = caixaOp - f.capex + lib - jur - am;
     acumST += semTerra; acum += semTerra - terraT;
     if (-acumST > r.picoSem) r.picoSem = -acumST;
     if (-acum > r.picoCom) r.picoCom = -acum;
@@ -533,8 +566,36 @@ function calc(p) {
       var cob = caixaOp / (jur + am);
       if (r.cobMin === null || cob < r.cobMin) r.cobMin = cob;
     }
-    r.fluxo.push({ t: t, herd: f.herd, vend: f.vend, rec: f.rec, compra: f.compra, opex: f.opex, caixaOp: caixaOp, capex: f.capex, terra: terraT, lib: f.lib, juros: jur, amort: am, saldo: saldo, semTerra: semTerra, acumST: acumST, acum: acum });
+    r.fluxo.push({ t: t, herd: f.herd, vend: f.vend, rec: f.rec, compra: f.compra, opex: f.opex, caixaOp: caixaOp, capex: f.capex, terra: terraT, lib: lib, juros: jur, jurosCap: capz, amort: am, saldo: saldo, semTerra: semTerra, acumST: acumST, acum: acum });
   }
+
+  // regime estável: juros sobre a maior dívida e a maior parcela de principal
+  r.juros = r.divida * p.taxa;
+  r.n1 = r.ebitda;
+  r.n2 = r.ebitda - r.juros;
+  r.n3 = r.n2 - r.amort;
+  r.n4 = r.n3 - r.parcelaTerra;
+  r.dividaMax = Math.max(0, r.ebitda) / (p.taxa + (r.divida > 0 ? r.amort / r.divida : 1 / r.anosAmort));
+  r.reserva = p.area * p.pastoHa / Math.max(1, p.vidaPasto) + r.maq / Math.max(1, p.vidaMaq) + r.benf / Math.max(1, p.vidaBenf);
+  r.n1r = r.n1 - r.reserva;
+  r.roi = r.capexSemTerra > 0 ? r.n1 / r.capexSemTerra : 0;
+
+  // indicadores
+  var arrOut = recria ? p.pesoMagro : p.pesoAbate;
+  r.arrProd = r.vendas * arrOut - r.compras * p.pesoEntrada;
+  r.arrVend = parc ? r.vendas * r.ganhoArr : r.vendas * arrOut;
+  r.arrHa = r.arrProd / p.area;
+  r.custoArrVend = (r.repos + r.opex) / r.arrVend;
+  r.custoArrProd = r.opex / r.arrProd;
+  r.agio = (p.bez / p.pesoEntrada) / p.boi - 1;
+  r.margemCabVendida = r.recCab - bez / (1 - r.mortCiclo);
+
+  // preços de equilíbrio com o rebanho atual (preço de referência: boi gordo, ou boi magro na recria)
+  var den = r.unidRec * (1 - p.funrural - p.cbsAliq);
+  var custoSemFunr = r.repos + r.opex - r.oFunrural - r.oCbs;
+  var extras = [0, r.juros, r.juros + r.amort, r.juros + r.amort + r.parcelaTerra];
+  r.boiMin = extras.map(function (x) { return (custoSemFunr + x) / den; });
+  r.bezMax = extras.map(function (x) { return parc ? null : (r.ebitda - x) / r.compras + p.bez; });
   return r;
 }
 
@@ -565,6 +626,8 @@ if (typeof module !== "undefined") module.exports = { DEFAULTS: DEFAULTS, calc: 
 (function(){
 "use strict";
 var F=[
+ ["g","Modelo de negócio"],
+ ["sistema","Sistema","",1,0,1,[[0,"Recria e engorda, gado próprio"],[1,"Só recria (vende boi magro)"],[2,"Engorda em parceria"]]],["pesoMagro","Recria: peso de venda","@ vivas",0.5],["precoMagro","Recria: preço do boi magro","R$/cab",50,0,1],["parcPct","Parceria: sua parte da arroba ganha","%",5,1,1],["parcCustos","Parceria: suplemento e sanidade","",1,0,0,[[0,"Por sua conta"],[1,"Por conta do dono do gado"]]],
  ["g","Propriedade e rebanho"],
  ["rebanho","Rebanho alojado","cab",10,0,1],["area","Área de pasto","ha",10,0,1],["lotMax","Capacidade de suporte","UA/ha",0.1],["areaTotal","Área total","ha",10],
  ["g","Preços"],
@@ -572,7 +635,7 @@ var F=[
  ["g","Zootecnia"],
  ["pesoEntrada","Peso de entrada","@",0.5],["pesoAbate","Peso de abate","@",0.5],["giro","Giro, da compra ao abate","meses",1,0,1],["mort","Mortalidade","% a.a.",0.5,1],["rend","Rendimento de carcaça","%",1,1],
  ["g","Crédito"],
- ["limite","Crédito pretendido","R$",100000,0,1],["taxa","Juros","% a.a.",0.1,1,1],["prazo","Prazo total","anos",1],["prazoGado","Prazo do gado","anos",1],["carencia","Carência","anos",1,0,1],["pctFin","Parcela financiável","%",5,1],
+ ["limite","Crédito pretendido","R$",100000,0,1],["taxa","Juros","% a.a.",0.1,1,1],["prazo","Prazo total","anos",1],["prazoGado","Prazo do gado","anos",1],["carencia","Carência","anos",1,0,1],["pctFin","Parcela financiável","%",5,1],["pctCusteio","Custeio financiado até a 1ª venda","%",10,1],["capJuros","Juros na carência","",1,0,0,[[0,"Pagos todo ano"],[1,"Capitalizados"]]],
  ["g","Terra"],
  ["arrendar","Comprar ou arrendar","",1,0,1,[[0,"Comprar a terra"],[1,"Arrendar"]]],["pastoPronto","Estado da área","",1,0,1,[[0,"Reformar área degradada"],[1,"Pasto e benfeitorias prontos"]]],["arrHa","Arrendamento (se arrendar)","R$/ha/ano",50],
  ["precoTerra","Preço da terra (se comprar)","R$/ha",500,0,1],["entradaTerra","Entrada","%",5,1],["parcelasTerra","Parcelas anuais","anos",1],
@@ -606,7 +669,7 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
   F.forEach(function(f){
     if(f[0]==="g"){close();html+="<fieldset><legend>"+f[1]+"</legend><div class=\"fields\">";open="g";return;}
     if(f[0]==="d"){close();html+="<details><summary>"+f[1]+"</summary><div class=\"fields\">";open="d";return;}
-    if(f[6]){ html+="<div class=\"f key\"><label for=\"i_"+f[0]+"\">"+f[1]+"</label><div class=\"inp\"><select id=\"i_"+f[0]+"\">"+f[6].map(function(o){return "<option value=\""+o[0]+"\">"+o[1]+"</option>";}).join("")+"</select></div></div>"; return; }
+    if(f[6]){ html+="<div class=\"f"+(f[5]?" key":"")+"\"><label for=\"i_"+f[0]+"\">"+f[1]+"</label><div class=\"inp\"><select id=\"i_"+f[0]+"\">"+f[6].map(function(o){return "<option value=\""+o[0]+"\">"+o[1]+"</option>";}).join("")+"</select></div></div>"; return; }
     html+="<div class=\"f"+(f[5]?" key":"")+"\"><label for=\"i_"+f[0]+"\">"+f[1]+"</label><div class=\"inp\"><input id=\"i_"+f[0]+"\" type=\"number\" inputmode=\"decimal\" step=\""+f[3]+"\" min=\"0\"><span class=\"u\">"+f[2]+"</span></div></div>";
   });
   close();
@@ -621,6 +684,8 @@ function readInputs(){
   F.forEach(function(f){ if(f.length<3) return; var v=parseFloat($("i_"+f[0]).value); if(!isFinite(v)||v<0) v=DEFAULTS[f[0]]*(PCT[f[0]]?100:1); p[f[0]]=PCT[f[0]]?v/100:v; });
   // limites para a conta não quebrar
   p.area=Math.max(1,p.area); p.rebanho=Math.max(1,p.rebanho); p.giro=Math.max(6,p.giro); p.rend=Math.min(0.7,Math.max(0.3,p.rend));
+  p.sistema=p.sistema===1?1:(p.sistema===2?2:0); p.parcCustos=p.parcCustos?1:0; p.capJuros=p.capJuros?1:0; p.parcPct=Math.min(1,p.parcPct); p.pctCusteio=Math.min(1,p.pctCusteio); p.pctFin=Math.min(1,p.pctFin);
+  p.prazo=Math.min(12,Math.max(1,Math.round(p.prazo))); p.carencia=Math.min(p.prazo-1,Math.round(p.carencia)); p.pesoMagro=Math.max(p.pesoEntrada+0.5,p.pesoMagro); p.precoMagro=Math.max(1,p.precoMagro);
   p.parcelasTerra=Math.max(1,p.parcelasTerra); p.arrendar=p.arrendar?1:0; p.pastoPronto=p.pastoPronto?1:0; p.boisCarreta=Math.max(1,p.boisCarreta); p.cabVaq=Math.max(1,p.cabVaq); p.piquete=Math.max(1,p.piquete);
   p.perdasSil=Math.min(0.9,p.perdasSil); p.prodCapiacu=Math.max(1,p.prodCapiacu); p.pesoAbate=Math.max(p.pesoEntrada+0.5,p.pesoAbate); p.lotMax=Math.max(0.1,p.lotMax); p.boi=Math.max(1,p.boi);
   return p;
@@ -630,6 +695,8 @@ function cls(v,tol){ return v>=tol?"pos":(v>-tol?"near":"neg"); }
 
 function render(){
   var p=readInputs(), r=calc(p), be=breakEvenHerd(p,3000);
+  var recria=p.sistema===1, parc=p.sistema===2;
+  var SIS=["Recria e engorda","Só recria","Parceria"];
   var S=[st(r.n1,r.opex),st(r.n2,r.juros||r.opex),st(r.n3,r.amort||r.opex),st(r.n4,r.parcelaTerra||r.opex)];
   var W={good:["Paga","Paga"],warn:["No limite","Empata"],bad:["Não paga","Não paga"]};
   var names=["o custeio","os juros","a amortização","a parcela da terra"];
@@ -643,10 +710,11 @@ function render(){
   }
   if(r.fin===0) parts.push("Sem crédito, os níveis 2 e 3 são iguais ao 1.");
   parts.push("Reservando a reposição de pasto e máquinas ("+R(r.reserva)+" por ano), a margem fica em "+R(r.n1r)+".");
-  var v=$("verdict"); v.className="verdict "+worst; v.textContent=h(p.rebanho)+" cabeças em "+h(p.area)+" ha: "+parts.join(" ");
+  if(worst==="good"&&r.n1r<0) worst="warn";
+  var v=$("verdict"); v.className="verdict "+worst; v.textContent=SIS[p.sistema]+", "+h(p.rebanho)+" cabeças em "+h(p.area)+" ha: "+parts.join(" ");
   function h(x){return nf0.format(x);}
   // níveis
-  var L=[["Nível 1: margem operacional","receita − reposição − custeio",r.n1],["Nível 2: depois dos juros","juros de "+R(r.juros)+" por ano",r.n2],["Nível 3: depois da amortização","parcela de "+R(r.amort)+" por ano",r.n3],["Nível 4: depois da terra","parcela de "+R(r.parcelaTerra)+" por ano",r.n4]];
+  var L=[["Nível 1: margem operacional",parc?"sua parte da arroba ganha − custeio":"receita − reposição − custeio",r.n1],["Nível 2: depois dos juros","juros de "+R(r.juros)+" por ano",r.n2],["Nível 3: depois da amortização","parcela de "+R(r.amort)+" por ano",r.n3],["Nível 4: depois da terra","parcela de "+R(r.parcelaTerra)+" por ano",r.n4]];
   if(r.terra===0) L.pop();
   $("levels").innerHTML=L.map(function(x,i){return "<div class=\"lv\"><div class=\"n\">"+x[0]+"<small>"+x[1]+"</small></div><div class=\"v\">"+R(x[2])+"</div><span class=\"pill "+S[i]+"\">"+W[S[i]][0]+"</span></div>";}).join("");
   // kpis
@@ -659,18 +727,52 @@ function render(){
   K.push(["Rebanho máximo que a área suporta",h(r.cabMax)+" cab",n(p.lotMax,1)+" UA/ha de referência",""]);
   K.push(["Lotação",n(r.lotUA,2)+" UA/ha",n(r.lotCab,2)+" cab/ha"+(r.lotUA>p.lotMax?", acima da capacidade":""),r.lotUA>p.lotMax?"bad":"good"]);
   K.push(["Ganho diário exigido",n(r.gmd,2)+" kg/dia",r.gmd<=0.6?"dentro de 0,4 a 0,6 (Embrapa)":"acima do usual a pasto",r.gmd<=0.6?"good":"bad"]);
-  K.push(["Arroba mínima para custeio + juros","R$ "+n(r.boiMin[1],0),"hoje: R$ "+n(p.boi,0),r.boiMin[1]<=p.boi?"good":"bad"]);
-  K.push(["Arroba mínima para a parcela do banco","R$ "+n(r.boiMin[2],0),"hoje: R$ "+n(p.boi,0),r.boiMin[2]<=p.boi?"good":"bad"]);
-  K.push(["Bezerro máximo para custeio + juros",r.bezMax[1]>0?R(r.bezMax[1]):"inviável","hoje: "+R(p.bez),r.bezMax[1]>=p.bez?"good":"bad"]);
-  K.push(["Dívida que a margem paga",R(r.dividaMax),"crédito usado: "+R(r.fin),r.dividaMax>=r.fin?"good":"bad"]);
+  var pm=recria?"Boi magro mínimo":"Arroba mínima";
+  K.push([pm+" para custeio + juros","R$ "+n(r.boiMin[1],0),"hoje: R$ "+n(r.precoRef,0),r.boiMin[1]<=r.precoRef?"good":"bad"]);
+  K.push([pm+" para a parcela do banco","R$ "+n(r.boiMin[2],0),"hoje: R$ "+n(r.precoRef,0),r.boiMin[2]<=r.precoRef?"good":"bad"]);
+  if(!parc) K.push(["Bezerro máximo para custeio + juros",r.bezMax[1]>0?R(r.bezMax[1]):"inviável","hoje: "+R(p.bez),r.bezMax[1]>=p.bez?"good":"bad"]);
+  K.push(["Dívida que a margem paga",R(r.dividaMax),r.divida>r.finTotal+1?"dívida com juros capitalizados: "+R(r.divida):"crédito usado: "+R(r.finTotal),r.dividaMax>=r.divida?"good":"bad"]);
+  if(p.pctCusteio>0) K.push(["Custeio financiado",R(r.finCust),r.finCust>0?n(100*r.finCust/r.finTotal,0)+"% do crédito"+(r.finCust>0.4*r.finTotal?"; acima dos 40% usuais":""):"não sobrou limite depois do investimento",r.finCust>0.4*r.finTotal||r.finCust===0?"warn":""]);
   K.push(["Investimento sem a terra",R(r.capexSemTerra),r.capexSemTerra<=p.limite?"cabe no crédito":"passa do crédito em "+R(r.capexSemTerra-r.fin),r.capexSemTerra<=p.limite?"good":"bad"]);
   K.push(["Recurso próprio até a 1ª venda",R(r.rpSem),r.terra>0?"com a terra: "+R(r.rpCom):"terra arrendada",""]);
   K.push(["Retorno sobre o investimento",n(r.roi*100,1)+"% a.a.","juros do crédito: "+n(p.taxa*100,2)+"%",r.roi>=p.taxa?"good":"bad"]);
   K.push(["Margem depois da reserva de reposição",R(r.n1r),"reserva de "+R(r.reserva)+" por ano",r.n1r>=0?"good":"bad"]);
   K.push(["Receita anual",R(r.receita),r.receita>=p.cbsLimite?"acima do limite da CBS/IBS (R$ 3,6 mi)":"abaixo do limite da CBS/IBS (R$ 3,6 mi)",r.receita>=p.cbsLimite?"warn":""]);
-  K.push(["Custo por arroba vendida","R$ "+n(r.custoArrVend,0),"reposição + custeio; Imea MT: R$ 370",""]);
-  K.push(["Arrobas produzidas por hectare",n(r.arrHa,1)+" @/ha/ano","ágio do bezerro: "+n(r.agio*100,0)+"%",""]);
+  K.push([parc?"Custo por arroba ganha":recria?"Custo por arroba viva vendida":"Custo por arroba vendida","R$ "+n(r.custoArrVend,0),parc?"custeio por sua conta":recria?"reposição + custeio":"reposição + custeio; Imea MT: R$ 370",""]);
+  K.push(["Arrobas produzidas por hectare",n(r.arrHa,1)+" @/ha/ano",parc?"gado de terceiro":"ágio do bezerro: "+n(r.agio*100,0)+"%",""]);
   $("kpis").innerHTML=K.map(function(k){return "<div class=\"kpi\"><div class=\"l\">"+k[0]+"</div><div class=\"v\">"+k[1]+"</div><div class=\"s "+k[3]+"\">"+k[2]+"</div></div>";}).join("");
+
+  // modelos lado a lado
+  var arrEx=p.arrHa>0?p.arrHa:600, t0="", combos=[];
+  [0,1,2].forEach(function(sx){ [0,1].forEach(function(ar){ combos.push([sx,ar]); }); });
+  t0="<tr><th>Modelo de negócio</th><th>Terra</th><th>Cabe na área?</th><th>1: margem</th><th>Margem após reserva</th><th>2: após juros</th><th>3: após amortização</th><th>Investimento</th><th>Próprio até 1ª venda</th><th>Retorno</th></tr>";
+  combos.forEach(function(c){
+    var cur=(c[0]===p.sistema&&c[1]===p.arrendar&&(c[1]?p.pastoPronto===1:p.pastoPronto===0));
+    var q=calc(clone(p,{sistema:c[0],giro:c[0]===p.sistema?p.giro:(c[0]===1?12:24),arrendar:c[1],pastoPronto:c[1],arrHa:c[1]?arrEx:0}));
+    t0+="<tr"+(cur?" class=\"cur\"":"")+"><td>"+SIS[c[0]]+"</td><td>"+(c[1]?"Arrendar pasto pronto":"Comprar e reformar")+"</td><td>"+(q.lotUA<=p.lotMax?"Sim":"Excede: máx. "+h(q.cabMax)+" cab")+"</td><td class=\""+cls(q.n1,0.05*q.opex)+"\">"+R(q.n1)+"</td><td class=\""+cls(q.n1r,0.05*q.opex)+"\">"+R(q.n1r)+"</td><td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+R(q.n2)+"</td><td class=\""+cls(q.n3,0.05*(q.amort||q.opex))+"\">"+R(q.n3)+"</td><td>"+R(q.capexSemTerra)+"</td><td>"+R(q.rpSem)+"</td><td>"+n(q.roi*100,1)+"%</td></tr>"; });
+  $("tModels").innerHTML=t0;
+
+  // cenários A e B
+  var cen=loadCen(), cols=[["Na tela",p]];
+  if(cen.A) cols.unshift(["A",clone(DEFAULTS,cen.A)]); if(cen.B) cols.splice(cen.A?1:0,0,["B",clone(DEFAULTS,cen.B)]);
+  var rs=cols.map(function(c){return calc(c[1]);});
+  function rowAB(label,fn,color){ return "<tr><td>"+label+"</td>"+cols.map(function(c,i){var x=fn(c[1],rs[i]); return "<td"+(color&&typeof x==="number"?" class=\""+(x<0?"neg":"pos")+"\"":"")+">"+(typeof x==="number"?R(x):x)+"</td>";}).join("")+"</tr>"; }
+  t0="<tr><th>Cenário</th>"+cols.map(function(c){return "<th>"+c[0]+"</th>";}).join("")+"</tr>";
+  t0+=rowAB("Modelo de negócio",function(q){return SIS[q.sistema];});
+  t0+=rowAB("Terra",function(q){return q.arrendar?"Arrendada, R$ "+n(q.arrHa)+"/ha":"Comprada, R$ "+n(q.precoTerra)+"/ha";});
+  t0+=rowAB("Rebanho e área",function(q){return n(q.rebanho)+" cab em "+n(q.area)+" ha";});
+  t0+=rowAB("Boi, bezerro",function(q){return "R$ "+n(q.boi)+" e R$ "+n(q.bez);});
+  t0+=rowAB("Crédito e juros",function(q){return "R$ "+n(q.limite)+" a "+n(q.taxa*100,2)+"%";});
+  t0+=rowAB("1: margem operacional",function(q,x){return x.n1;},1);
+  t0+=rowAB("Margem após reserva de reposição",function(q,x){return x.n1r;},1);
+  t0+=rowAB("2: após juros",function(q,x){return x.n2;},1);
+  t0+=rowAB("3: após amortização",function(q,x){return x.n3;},1);
+  t0+=rowAB("Investimento sem a terra",function(q,x){return R(x.capexSemTerra);});
+  t0+=rowAB("Maior dívida",function(q,x){return R(x.divida);});
+  t0+=rowAB("Recurso próprio até a 1ª venda",function(q,x){return R(x.rpSem);});
+  t0+=rowAB("Retorno sobre o investimento",function(q,x){return n(x.roi*100,1)+"% a.a.";});
+  if(cols.length===1) t0+="<tr><td colspan=\"2\">Nenhum cenário guardado ainda.</td></tr>";
+  $("tAB").innerHTML=t0;
 
   // tabela por rebanho
   var hs=[]; for(var x=100;x<=1500;x+=100) hs.push(x); if(hs.indexOf(p.rebanho)<0){hs.push(p.rebanho);hs.sort(function(a,b){return a-b;});}
@@ -684,10 +786,11 @@ function render(){
   t="<tr><th>Cenário</th><th>Boi</th><th>Bezerro</th><th>Margem</th><th>Após juros</th><th>Após amortização</th></tr>";
   sc.forEach(function(s){ var q=calc(clone(p,{boi:s[1],bez:s[2]}));
     t+="<tr><td>"+s[0]+"</td><td>"+n(s[1])+"</td><td>"+n(s[2])+"</td><td class=\""+cls(q.n1,0.05*q.opex)+"\">"+R(q.n1)+"</td><td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+R(q.n2)+"</td><td class=\""+cls(q.n3,0.05*(q.amort||q.opex))+"\">"+R(q.n3)+"</td></tr>"; });
+  if(p.sistema!==0) t="<tr><th>Cenário</th></tr><tr><td style=\"white-space:normal\">Os cenários de boi e bezerro valem para recria e engorda com gado próprio. Neste modelo, use a tabela de sensibilidade abaixo.</td></tr>";
   $("tScen").innerHTML=t;
 
   // custeio
-  var O=[["Receita com boi gordo",r.receita],["Reposição de bezerros",-r.repos],["Vaqueiros",-r.oVaq],["Pessoal fixo",-r.oFixoPessoal],["Sal mineral",-r.oSal],["Proteinado",-r.oProt],["Semiconfinamento",-r.oSemi],["Sanidade",-r.oSanid],["Diesel de rotina",-r.oDiesel],["Manutenção de pasto e cercas",-r.oManut],["Manutenção de máquinas e benfeitorias",-r.oManutMaq],["Administração",-r.oAdmin],["Arrendamento",-r.oArrend],["Frete",-r.oFrete],["Funrural e Senar",-r.oFunrural],["CBS e IBS",-r.oCbs]];
+  var O=[[recria?"Receita com boi magro":parc?"Receita da parceria":"Receita com boi gordo",r.receita],["Reposição de bezerros",-r.repos],["Vaqueiros",-r.oVaq],["Pessoal fixo",-r.oFixoPessoal],["Sal mineral",-r.oSal],["Proteinado",-r.oProt],["Semiconfinamento",-r.oSemi],["Sanidade",-r.oSanid],["Diesel de rotina",-r.oDiesel],["Manutenção de pasto e cercas",-r.oManut],["Manutenção de máquinas e benfeitorias",-r.oManutMaq],["Administração",-r.oAdmin],["Arrendamento",-r.oArrend],["Frete",-r.oFrete],["Funrural e Senar",-r.oFunrural],["CBS e IBS",-r.oCbs]];
   t="<tr><th>Linha</th><th>R$ por ano</th><th>R$ por cabeça</th></tr>";
   O.forEach(function(o){t+="<tr><td>"+o[0]+"</td><td>"+R(o[1])+"</td><td>"+R(o[1]/p.rebanho)+"</td></tr>";});
   t+="<tr class=\"tot\"><td>Margem operacional</td><td>"+R(r.n1)+"</td><td>"+R(r.n1/p.rebanho)+"</td></tr>";
@@ -696,40 +799,56 @@ function render(){
   $("tOpex").innerHTML=t;
 
   // sensibilidade
-  var bois=[],bezs=[],a; for(a=260;a<=440;a+=20) bois.push(a); for(a=2400;a<=4500;a+=300) bezs.push(a);
-  t="<tr><th>Bezerro \\ Boi</th>"+bois.map(function(b){return "<th>"+b+"</th>";}).join("")+"</tr>";
-  bezs.forEach(function(z){ t+="<tr><td>R$ "+n(z)+"</td>"+bois.map(function(b){var q=calc(clone(p,{boi:b,bez:z}));return "<td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+Rk(q.n2)+"</td>";}).join("")+"</tr>"; });
+  var cK=recria?"precoMagro":"boi", rK=parc?"parcPct":"bez", colsV=[], rowsV=[], a;
+  if(recria){ for(a=4000;a<=6250;a+=250) colsV.push(a); } else { for(a=260;a<=440;a+=20) colsV.push(a); }
+  if(parc){ for(a=30;a<=70;a+=5) rowsV.push(a/100); } else { for(a=2400;a<=4500;a+=300) rowsV.push(a); }
+  $("sensT").textContent="Sensibilidade: resultado depois dos juros, "+(recria?"boi magro":"boi")+" (colunas) × "+(parc?"sua parte na parceria":"bezerro")+" (linhas)";
+  t="<tr><th>"+(parc?"Sua parte":"Bezerro")+" \\ "+(recria?"Boi magro":"Boi")+"</th>"+colsV.map(function(b){return "<th>"+n(b)+"</th>";}).join("")+"</tr>";
+  rowsV.forEach(function(z){ var o={}; t+="<tr><td>"+(parc?n(z*100)+"%":"R$ "+n(z))+"</td>"+colsV.map(function(b){o[cK]=b;o[rK]=z;var q=calc(clone(p,o));return "<td class=\""+cls(q.n2,0.05*(q.juros||q.opex))+"\">"+Rk(q.n2)+"</td>";}).join("")+"</tr>"; });
   $("tSens").innerHTML=t;
 
   // capex
   var ja=p.pastoPronto?"já existe":"";
-  var C=[["Formação de pastagem",p.pastoPronto?"já existe":n(p.area)+" ha × R$ "+n(p.pastoHa),r.cPasto],["Curral",ja,r.cCurral],["Cerca de divisa",ja||n(r.kmExt,1)+" km",r.cCercaExt],["Cercas internas",ja||n(r.kmInt,1)+" km",r.cCercaInt],["Poço e adutora",ja,r.cPoco],["Bebedouros nos piquetes",ja||Math.ceil(p.area/p.piquete)+" piquetes",r.cBeb],["Galpão",ja,r.cGalpao],["Casa de vaqueiro",ja,r.cCasa],["Cochos",n(p.rebanho)+" cab",r.cCochos],["Trator e implementos","",p.trator],["Conjunto de silagem","",p.conjSilagem],["Capineira de capiaçu",n(r.haCapineira,1)+" ha",r.cCapineira],["Contingência",n(p.conting*100,0)+"%",r.cConting]];
+  var C=[["Formação de pastagem",p.pastoPronto?"já existe":n(p.area)+" ha × R$ "+n(p.pastoHa),r.cPasto],["Curral",ja,r.cCurral],["Cerca de divisa",ja||n(r.kmExt,1)+" km",r.cCercaExt],["Cercas internas",ja||n(r.kmInt,1)+" km",r.cCercaInt],["Poço e adutora",ja,r.cPoco],["Bebedouros nos piquetes",ja||Math.ceil(p.area/p.piquete)+" piquetes",r.cBeb],["Galpão",ja,r.cGalpao],["Casa de vaqueiro",ja,r.cCasa],["Cochos",n(p.rebanho)+" cab",r.cCochos],["Trator e implementos","",p.trator],["Conjunto de silagem",recria?"não usa":"",r.maq-p.trator],["Capineira de capiaçu",n(r.haCapineira,1)+" ha",r.cCapineira],["Contingência",n(p.conting*100,0)+"%",r.cConting]];
   t="<tr><th>Item</th><th>Quantidade</th><th>R$</th></tr>";
   C.forEach(function(c){t+="<tr><td>"+c[0]+"</td><td>"+c[1]+"</td><td>"+R(c[2])+"</td></tr>";});
   t+="<tr class=\"tot\"><td>Imobilizado</td><td></td><td>"+R(r.imob)+"</td></tr>";
-  t+="<tr><td>Bezerros</td><td>"+n(p.rebanho)+" cab × "+R(p.bez)+"</td><td>"+R(r.gado)+"</td></tr>";
+  t+="<tr><td>Bezerros</td><td>"+(parc?"gado de terceiro":n(p.rebanho)+" cab × "+R(p.bez))+"</td><td>"+R(r.gado)+"</td></tr>";
   t+="<tr class=\"tot\"><td>Investimento sem a terra</td><td></td><td>"+R(r.capexSemTerra)+"</td></tr>";
-  t+="<tr><td>Crédito utilizado</td><td></td><td>"+R(-r.fin)+"</td></tr>";
+  t+="<tr><td>Crédito para o investimento</td><td></td><td>"+R(-r.fin)+"</td></tr>";
   t+="<tr class=\"tot\"><td>Aporte próprio no investimento</td><td></td><td>"+R(r.aporteSemTerra)+"</td></tr>";
+  if(r.finCust>0) t+="<tr><td>Crédito para custeio até a 1ª venda</td><td>"+n(p.pctCusteio*100,0)+"% do custeio, dentro do limite</td><td>"+R(r.finCust)+"</td></tr>";
+  if(r.divida>r.finTotal+1) t+="<tr><td>Maior dívida, com juros capitalizados</td><td></td><td>"+R(r.divida)+"</td></tr>";
   t+=r.terra>0?"<tr><td>Terra</td><td>"+n(p.areaTotal)+" ha × "+R(p.precoTerra)+"</td><td>"+R(r.terra)+"</td></tr>":"<tr><td>Terra</td><td>arrendada: "+R(r.oArrend)+" por ano no custeio</td><td>"+R(0)+"</td></tr>";
   $("tCapex").innerHTML=t;
 
   // fluxo
-  var rows=[["Rebanho (cab)","herd",0],["Receita","rec",1],["Compra de bezerros","compra",-1],["Custeio","opex",-1],["Caixa operacional","caixaOp",2],["Investimento imobilizado","capex",-1],["Liberação do crédito","lib",1],["Juros","juros",-1],["Amortização","amort",-1],["Fluxo sem a terra","semTerra",2],["Acumulado sem a terra","acumST",2],["Terra","terra",-1],["Acumulado com a terra","acum",2]];
+  var rows=[["Rebanho (cab)","herd",0],["Receita","rec",1],["Compra de bezerros","compra",-1],["Custeio","opex",-1],["Caixa operacional","caixaOp",2],["Investimento imobilizado","capex",-1],["Liberação do crédito","lib",1],["Juros pagos","juros",-1],["Juros capitalizados","jurosCap",3],["Amortização","amort",-1],["Saldo devedor","saldo",3],["Fluxo sem a terra","semTerra",2],["Acumulado sem a terra","acumST",2],["Terra","terra",-1],["Acumulado com a terra","acum",2]];
   t="<tr><th>Ano</th>"+r.fluxo.map(function(f){return "<th>"+f.t+"</th>";}).join("")+"</tr>";
-  rows.forEach(function(rw){ t+="<tr"+(rw[2]===2?" class=\"tot\"":"")+"><td>"+rw[0]+"</td>"+r.fluxo.map(function(f){var x=f[rw[1]]*(rw[2]===-1?-1:1); if(rw[2]===0) return "<td>"+h(x)+"</td>"; return "<td"+(rw[2]===2?" class=\""+(x<0?"neg":"pos")+"\"":"")+">"+(Math.abs(x)<500?"0":Rk(x))+"</td>";}).join("")+"</tr>"; });
+  if(!p.capJuros) rows=rows.filter(function(rw){return rw[1]!=="jurosCap";});
+  rows.forEach(function(rw){ t+="<tr"+(rw[2]===2?" class=\"tot\"":"")+"><td>"+rw[0]+"</td>"+r.fluxo.map(function(f){var x=f[rw[1]]*(rw[2]===-1?-1:1); if(rw[2]===0) return "<td>"+h(x)+"</td>"; if(rw[2]===3) return "<td>"+(Math.abs(x)<500?"0":Rk(x))+"</td>"; return "<td"+(rw[2]===2?" class=\""+(x<0?"neg":"pos")+"\"":"")+">"+(Math.abs(x)<500?"0":Rk(x))+"</td>";}).join("")+"</tr>"; });
   $("tFlow").innerHTML=t;
 
-  try{ var sv={}; F.forEach(function(f){ if(f.length>=3) sv[f[0]]=p[f[0]]; }); localStorage.setItem("fazenda-calc-v4",JSON.stringify(sv)); }catch(e){}
+  try{ var sv={}; F.forEach(function(f){ if(f.length>=3) sv[f[0]]=p[f[0]]; }); localStorage.setItem("fazenda-calc-v5",JSON.stringify(sv)); }catch(e){}
+  lastP=p;
 }
+var lastP=null, CEN={};
+function loadCen(){ return CEN; }
+try{ var c0=JSON.parse(localStorage.getItem("fazenda-cen-v5")||"null"); if(c0&&typeof c0==="object") CEN=c0; }catch(e){}
+function saveCen(){ try{ localStorage.setItem("fazenda-cen-v5",JSON.stringify(CEN)); }catch(e){} }
+function pick(p){ var o={}; F.forEach(function(f){ if(f.length>=3) o[f[0]]=p[f[0]]; }); return o; }
 
 var PRE={mercado:{boi:376,bez:3600},antigo:{boi:235,bez:2150},estresse:{boi:300,bez:3600}};
 function markPreset(){
   var b=parseFloat($("i_boi").value),z=parseFloat($("i_bez").value);
   Array.prototype.forEach.call(document.querySelectorAll("[data-preset]"),function(btn){var q=PRE[btn.getAttribute("data-preset")];btn.setAttribute("aria-pressed",(q.boi===b&&q.bez===z)?"true":"false");});
+  var sx=$("i_sistema").value, ar=$("i_arrendar").value, pp=$("i_pastoPronto").value, tx=parseFloat($("i_taxa").value);
+  Array.prototype.forEach.call(document.querySelectorAll("[data-sis]"),function(btn){btn.setAttribute("aria-pressed",btn.getAttribute("data-sis")===sx?"true":"false");});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-model]"),function(btn){var m=btn.getAttribute("data-model");btn.setAttribute("aria-pressed",((m==="original"&&ar==="0"&&pp==="0")||(m==="arrendar"&&ar==="1"&&pp==="1"))?"true":"false");});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-taxa]"),function(btn){btn.setAttribute("aria-pressed",parseFloat(btn.getAttribute("data-taxa"))===tx?"true":"false");});
 }
 var start=clone(DEFAULTS,{});
-try{ var s=JSON.parse(localStorage.getItem("fazenda-calc-v4")||"null"); if(s) for(var k in s) if(k in DEFAULTS&&isFinite(s[k])) start[k]=s[k]; }catch(e){}
+try{ var s=JSON.parse(localStorage.getItem("fazenda-calc-v5")||localStorage.getItem("fazenda-calc-v4")||"null"); if(s) for(var k in s) if(k in DEFAULTS&&isFinite(s[k])) start[k]=s[k]; }catch(e){}
 setInputs(start);
 $("form").addEventListener("input",function(){render();markPreset();});
 $("form").addEventListener("change",function(){render();markPreset();});
@@ -737,10 +856,19 @@ $("form").addEventListener("submit",function(e){e.preventDefault();});
 $("presets").addEventListener("click",function(e){
   var b=e.target.closest("button"); if(!b) return;
   if(b.id==="reset"){ setInputs(DEFAULTS); }
+  else if(b.getAttribute("data-save")){ if(lastP){ CEN[b.getAttribute("data-save")]=pick(lastP); saveCen(); } }
+  else if(b.getAttribute("data-sis")){ var sv=b.getAttribute("data-sis"); $("i_sistema").value=sv; $("i_giro").value=sv==="1"?12:24; }
   else if(b.getAttribute("data-taxa")){ $("i_taxa").value=b.getAttribute("data-taxa"); }
   else if(b.getAttribute("data-model")==="original"){ $("i_arrendar").value="0"; $("i_pastoPronto").value="0"; $("i_arrHa").value=0; }
   else if(b.getAttribute("data-model")==="arrendar"){ $("i_arrendar").value="1"; $("i_pastoPronto").value="1"; $("i_arrHa").value=600; }
   else { var q=PRE[b.getAttribute("data-preset")]; $("i_boi").value=q.boi; $("i_bez").value=q.bez; }
+  render(); markPreset();
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-load]"); if(!b) return;
+  var w=b.getAttribute("data-load");
+  if(w==="clear"){ CEN={}; saveCen(); }
+  else if(CEN[w]){ setInputs(clone(DEFAULTS,CEN[w])); }
   render(); markPreset();
 });
 render(); markPreset();
